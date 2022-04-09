@@ -4,7 +4,7 @@ import gethigh.fp_be.model.Account;
 import java.util.Optional;
 
 public interface IAcountServicre {
-    void findAll();
+    Iterable<Account> findAll();
     void save(Account account);
     void delete(Long id);
     Optional<Account> findById(Long id);

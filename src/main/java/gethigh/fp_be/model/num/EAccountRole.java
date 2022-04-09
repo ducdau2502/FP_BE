@@ -1,6 +1,6 @@
 package gethigh.fp_be.model.num;
 
-public enum ERole {
+public enum EAccountRole {
     ROLE_ADMIN,
     ROLE_CUSTOMER,
     ROLE_SALER,

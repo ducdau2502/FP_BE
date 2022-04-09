@@ -16,8 +16,8 @@ public class AccountDetailService implements IAccountDetailService {
     AccountDetailRepo accountDetailRepo;
 
     @Override
-    public void findAll() {
-        accountDetailRepo.findAll();
+    public Iterable<AccountDetail> findAll() {
+       return accountDetailRepo.findAll();
     }
 
     @Override

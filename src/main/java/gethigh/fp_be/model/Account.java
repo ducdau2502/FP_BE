@@ -15,7 +15,7 @@ public class Account {
     private String password;
 
     @OneToMany
-    private List<Role> roles;
+    private List<AccountRole> roles;
 
     public Account() {
     }
@@ -23,7 +23,7 @@ public class Account {
     public Account(Long id,
                    String username,
                    String password,
-                   List<Role> roles) {
+                   List<AccountRole> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -54,11 +54,11 @@ public class Account {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
+    public List<AccountRole> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(List<AccountRole> roles) {
         this.roles = roles;
     }
 }

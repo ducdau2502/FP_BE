@@ -5,7 +5,7 @@ import gethigh.fp_be.model.BillDetail;
 import java.util.Optional;
 
 public interface IBillDetailService {
-    void findAll();
+    Iterable<BillDetail> findAll();
     void save(BillDetail billDetail);
     void delete(Long id);
     Optional<BillDetail> findById(Long id);

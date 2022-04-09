@@ -1,9 +1,9 @@
 package gethigh.fp_be.repositor;
 
-import gethigh.fp_be.model.Role;
+import gethigh.fp_be.model.AccountRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RoleRepo extends JpaRepository<Role,Long> {
+public interface AccountRoleRepo extends JpaRepository<AccountRole,Long> {
 }

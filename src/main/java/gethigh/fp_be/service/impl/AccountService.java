@@ -14,8 +14,8 @@ public class AccountService implements IAcountServicre {
     AccountRepo accountRepo;
 
     @Override
-    public void findAll() {
-        accountRepo.findAll();
+    public Iterable<Account> findAll() {
+       return accountRepo.findAll();
     }
 
     @Override

@@ -1,23 +1,23 @@
 package gethigh.fp_be.model;
 
 
-import gethigh.fp_be.model.num.ERole;
+import gethigh.fp_be.model.num.EAccountRole;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class AccountRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private ERole name;
+    private EAccountRole name;
 
-    public Role() {
+    public AccountRole() {
     }
 
-    public Role(Long id,
-                ERole name) {
+    public AccountRole(Long id,
+                       EAccountRole name) {
         this.id = id;
         this.name = name;
     }
@@ -30,11 +30,11 @@ public class Role {
         this.id = id;
     }
 
-    public ERole getName() {
+    public EAccountRole getName() {
         return name;
     }
 
-    public void setName(ERole name) {
+    public void setName(EAccountRole name) {
         this.name = name;
     }
 }

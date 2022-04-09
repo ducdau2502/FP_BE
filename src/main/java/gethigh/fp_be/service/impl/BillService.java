@@ -14,8 +14,8 @@ public class BillService implements IBillService {
     BillRepo billRepo;
 
     @Override
-    public void findAll() {
-        billRepo.findAll();
+    public Iterable<Bill> findAll() {
+       return billRepo.findAll();
     }
 
     @Override

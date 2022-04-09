@@ -14,8 +14,8 @@ public class BillDetailService implements IBillDetailService {
     BillDetailRepo billDetailRepo;
 
     @Override
-    public void findAll() {
-        billDetailRepo.findAll();
+    public Iterable<BillDetail> findAll() {
+        return billDetailRepo.findAll();
     }
 
     @Override
