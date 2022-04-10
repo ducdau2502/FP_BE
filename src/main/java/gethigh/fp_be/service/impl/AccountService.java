@@ -2,35 +2,26 @@ package gethigh.fp_be.service.impl;
 
 import gethigh.fp_be.model.Account;
 import gethigh.fp_be.repository.AccountRepo;
-import gethigh.fp_be.service.IAcountServicre;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
-public class AccountService implements IAcountServicre {
+public class AccountService implements UserDetailsService {
+
     @Autowired
     AccountRepo accountRepo;
 
     @Override
-    public Iterable<Account> findAll() {
-       return accountRepo.findAll();
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Account account = accountRepo.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Account not found with username " + username));
+        return AccountDetailIplm.build(account) ;
     }
-
-    @Override
-    public void save(Account account) {
-        accountRepo.save(account);
-    }
-
-    @Override
-    public void delete(Long id) {
-        accountRepo.deleteById(id);
-    }
-
-    @Override
-    public Optional<Account> findById(Long id) {
-        return accountRepo.findById(id);
-    }
-
 }

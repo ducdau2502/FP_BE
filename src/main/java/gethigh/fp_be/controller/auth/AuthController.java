@@ -1,0 +1,114 @@
+package gethigh.fp_be.controller.auth;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
+
+import gethigh.fp_be.dao.request.LoginRequest;
+import gethigh.fp_be.dao.request.SignupRequest;
+import gethigh.fp_be.dao.response.JwtResponse;
+import gethigh.fp_be.dao.response.MessageResponse;
+import gethigh.fp_be.model.Account;
+import gethigh.fp_be.model.AccountRole;
+import gethigh.fp_be.model.num.EAccountRole;
+import gethigh.fp_be.repository.AccountRepo;
+import gethigh.fp_be.repository.AccountRoleRepo;
+import gethigh.fp_be.security.JwtUtils;
+import gethigh.fp_be.service.impl.AccountDetailIplm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/api/auth/account")
+public class AuthController {
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+    @Autowired
+    AccountRepo accountRepo;
+    @Autowired
+    AccountRoleRepo accountRoleRepo;
+    @Autowired
+    PasswordEncoder encoder;
+    @Autowired
+    JwtUtils jwtUtils;
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        AccountDetailIplm accountDetails = (AccountDetailIplm) authentication.getPrincipal();
+        List<String> roles = accountDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(new JwtResponse(jwt,
+                accountDetails.getId(),
+                accountDetails.getUsername(),
+                accountDetails.getEmail(),
+                roles));
+    }
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+        if (accountRepo.existsByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Username is already taken!"));
+        }
+        if (accountRepo.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use!"));
+        }
+        // Create new user's account
+        Account account = new Account(signUpRequest.getUsername(),
+                encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getEmail()
+
+        );
+
+        Set<String> strRoles = signUpRequest.getRole();
+        Set<AccountRole> roles = new HashSet<>();
+        if (strRoles == null) {
+            AccountRole accountRole= accountRoleRepo.findByName(EAccountRole.ROLE_CUSTOMER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(accountRole);
+        } else {
+            strRoles.forEach(role -> {
+                switch (role) {
+                    case "admin":
+                        AccountRole adminRole = accountRoleRepo.findByName(EAccountRole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(adminRole);
+                        break;
+                    case "saler":
+                        AccountRole salerRole = accountRoleRepo.findByName(EAccountRole.ROLE_SALER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(salerRole);
+                        break;
+                    default:
+                        AccountRole customerRole = accountRoleRepo.findByName(EAccountRole.ROLE_CUSTOMER)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(customerRole);
+                }
+            });
+        }
+        account.setRoles(roles);
+        accountRepo.save(account);
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+}
