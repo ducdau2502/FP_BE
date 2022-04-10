@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class StoreController {
 
     // khu vực thực hiện các tác vụ với store - huydu
+
+    // test phân quyền
     @GetMapping("/show")
     private String showPage(){
         return "  store page";

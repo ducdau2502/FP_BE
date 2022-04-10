@@ -9,10 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Service
-public class AccountService implements UserDetailsService {
+public class AccountService implements UserDetailsService{
 
     @Autowired
     AccountRepo accountRepo;
@@ -24,4 +23,6 @@ public class AccountService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Account not found with username " + username));
         return AccountDetailIplm.build(account) ;
     }
+
+
 }

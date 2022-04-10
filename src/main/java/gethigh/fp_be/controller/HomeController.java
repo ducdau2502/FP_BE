@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth/home")
 public class HomeController {
 // khu vực thực hiện các logic với trang chủ - huydu
+
+    // test phân quyền
     @GetMapping("/show")
     private String showPage(){
         return " Home page";
