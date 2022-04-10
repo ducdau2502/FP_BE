@@ -16,8 +16,7 @@ public class Product {
     private Integer soldQuantity;
     private String description;
 
-    @OneToMany
-    private List<ProductImage> images;
+
 
     public Product() {
     }
@@ -27,15 +26,13 @@ public class Product {
                    Double price,
                    Integer inventoryQuantity,
                    Integer soldQuantity,
-                   String description,
-                   List<ProductImage> images) {
+                   String description) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.inventoryQuantity = inventoryQuantity;
         this.soldQuantity = soldQuantity;
         this.description = description;
-        this.images = images;
     }
 
     public Long getId() {
@@ -84,13 +81,5 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<ProductImage> getImages() {
-        return images;
-    }
-
-    public void setImages(List<ProductImage> images) {
-        this.images = images;
     }
 }

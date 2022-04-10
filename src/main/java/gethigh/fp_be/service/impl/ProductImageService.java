@@ -2,7 +2,7 @@ package gethigh.fp_be.service.impl;
 
 
 import gethigh.fp_be.model.ProductImage;
-import gethigh.fp_be.repositor.ProductImageRepo;
+import gethigh.fp_be.repository.ProductImageRepo;
 import gethigh.fp_be.service.IProductImageService;
 
 import org.springframework.beans.factory.annotation.Autowired;

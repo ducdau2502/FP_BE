@@ -1,19 +1,18 @@
 package gethigh.fp_be.model;
 
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "productRatings")
-public class ProductRating {
-
+@Table(name = "store_likes")
+public class StoreLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String level;
 
     @ManyToOne
-    private AccountDetail accountRating;
+    private AccountDetail accountLike;
 
     @ManyToOne
-    private Product productRating;
+    private Store store;
 }

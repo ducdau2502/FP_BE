@@ -1,4 +1,4 @@
-package gethigh.fp_be.repositor;
+package gethigh.fp_be.repository;
 
 import gethigh.fp_be.model.StoreCategories;
 import org.springframework.data.jpa.repository.JpaRepository;

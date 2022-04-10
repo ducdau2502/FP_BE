@@ -1,7 +1,7 @@
 package gethigh.fp_be.service.impl;
 
 import gethigh.fp_be.model.Bill;
-import gethigh.fp_be.repositor.BillRepo;
+import gethigh.fp_be.repository.BillRepo;
 import gethigh.fp_be.service.IBillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -3,20 +3,24 @@ package gethigh.fp_be.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "productImages")
+@Table(name = "product_images")
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String url;
 
+
+    @ManyToOne
+    private Product product;
+
     public ProductImage() {
     }
 
-    public ProductImage(Long id,
-                        String url) {
+    public ProductImage(Long id, String url, Product product) {
         this.id = id;
         this.url = url;
+        this.product = product;
     }
 
     public Long getId() {
@@ -33,5 +37,13 @@ public class ProductImage {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

@@ -1,7 +1,7 @@
 package gethigh.fp_be.service.impl;
 
 import gethigh.fp_be.model.Store;
-import gethigh.fp_be.repositor.StoreRepo;
+import gethigh.fp_be.repository.StoreRepo;
 import gethigh.fp_be.service.IStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

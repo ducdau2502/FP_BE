@@ -1,7 +1,7 @@
 package gethigh.fp_be.service.impl;
 
 import gethigh.fp_be.model.StoreRating;
-import gethigh.fp_be.repositor.StoreRatingRepo;
+import gethigh.fp_be.repository.StoreRatingRepo;
 import gethigh.fp_be.service.IStoreRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

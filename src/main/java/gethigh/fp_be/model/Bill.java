@@ -2,13 +2,15 @@ package gethigh.fp_be.model;
 
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "buills")
+@Table(name = "bills")
 public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private LocalDate dateCreate;
 
 
     @ManyToOne
@@ -21,15 +23,25 @@ public class Bill {
     }
 
     public Bill(Long id,
+                LocalDate dateCreate,
                 AccountDetail customer,
                 Store storeBuy) {
         this.id = id;
+        this.dateCreate = dateCreate;
         this.customer = customer;
         this.storeBuy = storeBuy;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public LocalDate getDateCreate() {
+        return dateCreate;
+    }
+
+    public void setDateCreate(LocalDate dateCreate) {
+        this.dateCreate = dateCreate;
     }
 
     public void setId(Long id) {

@@ -1,7 +1,7 @@
 package gethigh.fp_be.service.impl;
 
 import gethigh.fp_be.model.Account;
-import gethigh.fp_be.repositor.AccountRepo;
+import gethigh.fp_be.repository.AccountRepo;
 import gethigh.fp_be.service.IAcountServicre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
