@@ -16,7 +16,7 @@ import gethigh.fp_be.model.num.EAccountRole;
 import gethigh.fp_be.repository.AccountRepo;
 import gethigh.fp_be.repository.AccountRoleRepo;
 import gethigh.fp_be.security.JwtUtils;
-import gethigh.fp_be.service.impl.AccountDetailIplm;
+import gethigh.fp_be.service.impl.AccountDetailImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -52,7 +52,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        AccountDetailIplm accountDetails = (AccountDetailIplm) authentication.getPrincipal();
+        AccountDetailImpl accountDetails = (AccountDetailImpl) authentication.getPrincipal();
         List<String> roles = accountDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());

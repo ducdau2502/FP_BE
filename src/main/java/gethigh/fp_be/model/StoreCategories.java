@@ -3,7 +3,7 @@ package gethigh.fp_be.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "storeCategories")
+@Table(name = "store_categories")
 public class StoreCategories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

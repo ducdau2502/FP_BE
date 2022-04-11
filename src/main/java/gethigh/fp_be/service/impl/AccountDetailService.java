@@ -14,23 +14,24 @@ public class AccountDetailService implements IAccountDetailService {
     @Autowired
     AccountDetailRepo accountDetailRepo;
 
+
     @Override
     public Iterable<AccountDetail> findAll() {
-       return accountDetailRepo.findAll();
-    }
-
-    @Override
-    public void save(AccountDetail accountDetail) {
-        accountDetailRepo.save(accountDetail);
-    }
-
-    @Override
-    public void delete(Long id) {
-        accountDetailRepo.deleteById(id);
+        return accountDetailRepo.findAll();
     }
 
     @Override
     public Optional<AccountDetail> findById(Long id) {
         return accountDetailRepo.findById(id);
+    }
+
+    @Override
+    public AccountDetail save(AccountDetail accountDetail) {
+        return accountDetailRepo.save(accountDetail);
+    }
+
+    @Override
+    public void remove(Long id) {
+        accountDetailRepo.deleteById(id);
     }
 }

@@ -13,23 +13,24 @@ public class ProductService implements IProductService {
     @Autowired
     ProductRepo productRepo;
 
+
     @Override
     public Iterable<Product> findAll() {
-       return productRepo.findAll();
-    }
-
-    @Override
-    public void save(Product product) {
-        productRepo.save(product);
-    }
-
-    @Override
-    public void delete(Long id) {
-        productRepo.deleteById(id);
+        return productRepo.findAll();
     }
 
     @Override
     public Optional<Product> findById(Long id) {
-        return Optional.empty();
+        return productRepo.findById(id);
+    }
+
+    @Override
+    public Product save(Product product) {
+        return productRepo.save(product);
+    }
+
+    @Override
+    public void remove(Long id) {
+        productRepo.deleteById(id);
     }
 }

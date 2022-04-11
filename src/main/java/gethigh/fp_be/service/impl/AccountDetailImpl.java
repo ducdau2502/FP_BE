@@ -5,13 +5,12 @@ import gethigh.fp_be.model.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AccountDetailIplm implements UserDetails {
+public class AccountDetailImpl implements UserDetails {
 
     private static final Long serialVersionUID = 1L;
     private Long id;
@@ -23,7 +22,7 @@ public class AccountDetailIplm implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public AccountDetailIplm(Long id,
+    public AccountDetailImpl(Long id,
                              String username,
                              String email,
                              String password,
@@ -35,11 +34,11 @@ public class AccountDetailIplm implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static AccountDetailIplm build(Account account) {
+    public static AccountDetailImpl build(Account account) {
         List<GrantedAuthority> authorities = account.getRoles().stream()
                 .map(accountRole -> new SimpleGrantedAuthority(accountRole.getName().name()))
                 .collect(Collectors.toList());
-        return new AccountDetailIplm(
+        return new AccountDetailImpl(
                 account.getId(),
                 account.getUsername(),
                 account.getEmail(),

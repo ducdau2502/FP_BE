@@ -21,7 +21,7 @@ public class AccountDetail {
     private String avatar;
     private LocalDate dateCreate;
     private Integer bankAccount;
-
+    private String status;
 
     @OneToOne
     private Account account;
@@ -39,6 +39,7 @@ public class AccountDetail {
                          String avatar,
                          LocalDate dateCreate,
                          Integer bankAccount,
+                         String status,
                          Account account) {
         this.id = id;
         this.fullName = fullName;
@@ -49,6 +50,7 @@ public class AccountDetail {
         this.avatar = avatar;
         this.dateCreate = dateCreate;
         this.bankAccount = bankAccount;
+        this.status = status;
         this.account = account;
     }
 
@@ -122,6 +124,14 @@ public class AccountDetail {
 
     public void setBankAccount(Integer bankAccount) {
         this.bankAccount = bankAccount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Account getAccount() {

@@ -14,7 +14,7 @@ public class Store {
     private String avatar;
 
     @OneToOne
-    private AccountDetail storeOwer;
+    private AccountDetail storeOwner;
 
     @OneToMany
     private List<StoreCategories> categoriesList;
@@ -29,14 +29,14 @@ public class Store {
                  String name,
                  String description,
                  String avatar,
-                 AccountDetail storeOwer,
+                 AccountDetail storeOwner,
                  List<StoreCategories> categoriesList,
                  List<Product> productList) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.avatar = avatar;
-        this.storeOwer = storeOwer;
+        this.storeOwner = storeOwner;
         this.categoriesList = categoriesList;
         this.productList = productList;
     }
@@ -73,12 +73,12 @@ public class Store {
         this.avatar = avatar;
     }
 
-    public AccountDetail getStoreOwer() {
-        return storeOwer;
+    public AccountDetail getStoreOwner() {
+        return storeOwner;
     }
 
-    public void setStoreOwer(AccountDetail storeOwer) {
-        this.storeOwer = storeOwer;
+    public void setStoreOwner(AccountDetail storeOwner) {
+        this.storeOwner = storeOwner;
     }
 
     public List<StoreCategories> getCategoriesList() {
