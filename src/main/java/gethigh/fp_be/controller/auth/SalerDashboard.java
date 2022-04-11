@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/auth/saler/dashboard")
+@RequestMapping("api/auth/saler/dashboard")
 public class SalerDashboard {
 //khu vực thực hiện các tác vụ quản lý với gian hàng - huydu
 

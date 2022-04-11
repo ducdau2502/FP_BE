@@ -29,10 +29,12 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter{
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
+
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
+
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(accountService).passwordEncoder(passwordEncoder());

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/auth/home")
+@RequestMapping("api/auth/home")
 public class HomeController {
 // khu vực thực hiện các logic với trang chủ - huydu
 

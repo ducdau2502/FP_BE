@@ -1,8 +1,5 @@
-package gethigh.fp_be.dao.request;
+package gethigh.fp_be.dto.request;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 public class AcceptRequest {

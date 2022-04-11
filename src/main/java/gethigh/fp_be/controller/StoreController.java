@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/auth/store")
+@RequestMapping("api/auth/store")
 public class StoreController {
 
     // khu vực thực hiện các tác vụ với store - huydu

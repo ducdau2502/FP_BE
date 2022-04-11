@@ -2,7 +2,6 @@ package gethigh.fp_be.model;
 
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
