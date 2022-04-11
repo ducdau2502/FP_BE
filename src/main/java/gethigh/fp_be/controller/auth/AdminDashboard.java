@@ -3,9 +3,11 @@ package gethigh.fp_be.controller.auth;
 import gethigh.fp_be.dao.request.AcceptRequest;
 import gethigh.fp_be.model.Account;
 import gethigh.fp_be.model.AccountRole;
+import gethigh.fp_be.model.Store;
 import gethigh.fp_be.model.num.EAccountRole;
 import gethigh.fp_be.repository.AccountRepo;
 import gethigh.fp_be.repository.AccountRoleRepo;
+import gethigh.fp_be.service.IStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,9 @@ public class AdminDashboard {
     @Autowired
     AccountRoleRepo roleRepo;
 
+    @Autowired
+    IStoreService iStoreService;
+
     // test phân quyền
     @GetMapping("/show")
     private String showDashboard() {
@@ -39,6 +44,8 @@ public class AdminDashboard {
         Optional<Account> account = accountRepo.findById(id);
         Set<String> strRoles = acceptRequest.getRole();
         Set<AccountRole> roles = new HashSet<>();
+        Store store = new Store();
+
         if (!account.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -65,8 +72,11 @@ public class AdminDashboard {
                 account.get().getPassword(),
                 account.get().getEmail(),
                 account.get().getRoles());
-        accountRepo.save(accountNew);
+        store.setName(acceptRequest.getNameStore());
+        store.setDescription(acceptRequest.getDescription());
 
+        iStoreService.save(store);
+        accountRepo.save(accountNew);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }

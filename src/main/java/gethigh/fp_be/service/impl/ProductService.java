@@ -19,6 +19,11 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public Iterable<Product> findByName(String name) {
+        return productRepo.findAllByNameContaining(name);
+    }
+
+    @Override
     public void save(Product product) {
         productRepo.save(product);
     }

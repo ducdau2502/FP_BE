@@ -80,7 +80,6 @@ public class AuthController {
                 signUpRequest.getEmail()
 
         );
-
         Set<String> strRoles = signUpRequest.getRole();
         Set<AccountRole> roles = new HashSet<>();
         if (strRoles == null) {
