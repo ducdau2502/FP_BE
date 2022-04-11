@@ -29,8 +29,8 @@ public class StoreController {
 
     @Autowired
     StoreRepo storeRepo;
-    // test phân quyền
 
+    // test phân quyền
     @Autowired
     ProductRepo productRepo;
     @GetMapping("/show")
