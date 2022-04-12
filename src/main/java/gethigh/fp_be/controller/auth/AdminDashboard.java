@@ -61,10 +61,10 @@ public class AdminDashboard {
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     roles.add(adminRole);
                     break;
-                case "saler":
-                    AccountRole salerRole = roleRepo.findByName(EAccountRole.ROLE_SALER)
+                case "seller":
+                    AccountRole sellerRole = roleRepo.findByName(EAccountRole.ROLE_SELLER)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    roles.add(salerRole);
+                    roles.add(sellerRole);
                     break;
             }
         });
