@@ -16,4 +16,6 @@ public interface ProductRepo extends JpaRepository<Product,Long> {
     Iterable<Product> findAllByNameWithStore(Long id, String name);
 
     Iterable<Product> findAllByStore_Id(Long id);
+
+    Iterable<Product> findAllByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(Double lowerPrice, Double upperPrice);
 }

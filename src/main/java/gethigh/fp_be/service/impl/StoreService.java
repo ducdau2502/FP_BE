@@ -33,4 +33,9 @@ public class StoreService implements IStoreService {
     public void remove(Long id) {
         storeRepo.deleteById(id);
     }
+
+    @Override
+    public Iterable<Store> findAllByNameContaining(String name) {
+        return storeRepo.findAllByNameContaining(name);
+    }
 }
