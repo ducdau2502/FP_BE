@@ -8,5 +8,7 @@ public interface IProductService extends _IGeneralService<Product> {
 
     Iterable<Product> findAllByStore_Id(Long id);
 
+    Iterable<Product> top3ProductSale();
+
     Iterable<Product> findAllByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(Double lowerPrice, Double upperPrice);
 }
