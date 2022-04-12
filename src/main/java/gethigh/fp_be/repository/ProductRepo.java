@@ -17,6 +17,8 @@ public interface ProductRepo extends JpaRepository<Product,Long> {
 
     Iterable<Product> findAllByStore_Id(Long id);
 
+    Iterable<Product> findAllByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(Double lowerPrice, Double upperPrice);
+
     //Hiển thị 3 sản phẩm được bán nhiều nhất
     @Query(nativeQuery = true, value = "select * from products order by products.sold_quantity desc limit 3;")
     Iterable<Product> topProductSale();

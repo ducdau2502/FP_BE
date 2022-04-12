@@ -16,21 +16,19 @@ public class Store {
     @OneToOne
     private AccountDetail storeOwner;
 
-//    @OneToMany
-//    private List<StoreCategories> categoriesList;
-
-//    @OneToMany
-//    private List<Product> productList;
+    @ManyToOne
+    private StoreCategories categoriesList;
 
     public Store() {
     }
 
-    public Store(Long id, String name, String description, String avatar, AccountDetail storeOwner) {
+    public Store(Long id, String name, String description, String avatar, AccountDetail storeOwner, StoreCategories categoriesList) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.avatar = avatar;
         this.storeOwner = storeOwner;
+        this.categoriesList = categoriesList;
     }
 
     public Long getId() {
@@ -71,5 +69,13 @@ public class Store {
 
     public void setStoreOwner(AccountDetail storeOwner) {
         this.storeOwner = storeOwner;
+    }
+
+    public StoreCategories getCategoriesList() {
+        return categoriesList;
+    }
+
+    public void setCategoriesList(StoreCategories categoriesList) {
+        this.categoriesList = categoriesList;
     }
 }

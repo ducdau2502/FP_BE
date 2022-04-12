@@ -39,4 +39,9 @@ public class StoreService implements IStoreService {
     public Iterable<TopStoreSale> topStoreSale() {
         return storeRepo.topStoreSale();
     }
+
+    @Override
+    public Iterable<Store> findAllByNameContaining(String name) {
+        return storeRepo.findAllByNameContaining(name);
+    }
 }

@@ -5,4 +5,6 @@ import gethigh.fp_be.model.Store;
 
 public interface IStoreService extends _IGeneralService<Store> {
     Iterable<TopStoreSale> topStoreSale();
+
+    Iterable<Store> findAllByNameContaining(String name);
 }

@@ -13,4 +13,6 @@ public interface StoreRepo extends JpaRepository<Store,Long> {
             "join stores on products.store_id = stores.store_owner_id\n" +
             "group by store_id order by sumQ desc limit 2;")
     Iterable<TopStoreSale> topStoreSale();
+
+    Iterable<Store> findAllByNameContaining(String name);
 }
