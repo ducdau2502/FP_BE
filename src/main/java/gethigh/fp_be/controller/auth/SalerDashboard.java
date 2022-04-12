@@ -20,10 +20,10 @@ public class SalerDashboard {
 //khu vực thực hiện các tác vụ quản lý với gian hàng - huydu
 
     // test phân quyền
-    @GetMapping("/show")
-    private String showDashboard(){
-        return " Saler Dashboard";
-    }
+//    @GetMapping("/show")
+//    private String showDashboard(){
+//        return " Saler Dashboard";
+//    }
 
     @Autowired
     IProductService productService;
@@ -36,7 +36,7 @@ public class SalerDashboard {
 
     //hiển thị tất cả product của 1 cửa hàng
     @GetMapping("/{id}")
-    public ResponseEntity<Iterable<Product>> findAllProductsByStore(@PathVariable("id") Long id) {
+    public ResponseEntity<?> findAllProducts(@PathVariable("id") Long id) {
         Iterable<Product> products = productService.findAllByStore_Id(id);
         if (products.iterator().hasNext()) {
             return new ResponseEntity<>(products, HttpStatus.OK);
@@ -46,29 +46,35 @@ public class SalerDashboard {
 
     @PostMapping("/{id_store}/create-product")
     public ResponseEntity<?> createProduct(@PathVariable("id_store") Long id_store,
-                                                 @RequestParam("product") Product product,
-                                                 @RequestParam("file") MultipartFile file) {
-        String message = "";
+                                           @RequestBody Product product) {
         product.setSoldQuantity(0);
         product.setStore(iStoreService.findById(id_store).get());
-        try {
-            iProductImageService.saveFile(file);
-            productService.save(product);
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
-            return new ResponseEntity<>(new MessageResponse(message), HttpStatus.CREATED);
-        } catch (Exception e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return new ResponseEntity<>(new MessageResponse(message), HttpStatus.EXPECTATION_FAILED);
-        }
+        Product productCreate = productService.save(product);
+        return new ResponseEntity<>(productCreate, HttpStatus.CREATED);
     }
 
-    @DeleteMapping
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable("id") Long id,
+                                           @RequestBody Product productUpdate) {
+        Optional<Product> product = productService.findById(id);
+        if (!product.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        productUpdate.setId(product.get().getId());
+        productUpdate.setSoldQuantity(product.get().getSoldQuantity());
+        productUpdate.setStore(product.get().getStore());
+        productUpdate = productService.save(productUpdate);
+        return new ResponseEntity<>(productUpdate, HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable("id") Long id) {
         Optional<Product> product = productService.findById(id);
         if (!product.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        iStoreService.remove(id);
+        productService.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
