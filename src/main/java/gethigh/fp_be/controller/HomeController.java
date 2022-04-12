@@ -84,5 +84,13 @@ public class HomeController {
         return new ResponseEntity<>(products,HttpStatus.OK);
     }
 
-
+    //Top 3 sản phẩm được bán nhiều nhất
+    @GetMapping("/top-product-sale")
+    private ResponseEntity<?> top3ProductSale() {
+        Iterable<Product> products = productService.top3ProductSale();
+        if (!products.iterator().hasNext()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(products,HttpStatus.OK);
+    }
 }
