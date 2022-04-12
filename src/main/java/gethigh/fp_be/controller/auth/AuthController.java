@@ -99,10 +99,10 @@ public class AuthController {
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
                         break;
-                    case "saler":
-                        AccountRole salerRole = accountRoleRepo.findByName(EAccountRole.ROLE_SALER)
+                    case "seller":
+                        AccountRole sellerRole = accountRoleRepo.findByName(EAccountRole.ROLE_SELLER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(salerRole);
+                        roles.add(sellerRole);
                         break;
                     default:
                         AccountRole customerRole = accountRoleRepo.findByName(EAccountRole.ROLE_CUSTOMER)

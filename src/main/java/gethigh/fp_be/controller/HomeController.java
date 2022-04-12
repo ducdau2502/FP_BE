@@ -44,7 +44,8 @@ public class HomeController {
         return " Home page";
     }
 
-    @GetMapping("/find_store/{id}")
+    // xem thông tin cửa hàng
+    @GetMapping("/find-store/{id}")
     public ResponseEntity<?> findStoreById(@PathVariable("id") long id) {
         Optional<Store> storeOptional = storeService.findById(id);
         if (storeOptional.isPresent()) {
