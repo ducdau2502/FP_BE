@@ -21,7 +21,7 @@ public class AccountService implements UserDetailsService{
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Account not found with username " + username));
-        return AccountDetailIplm.build(account) ;
+        return AccountDetailImpl.build(account) ;
     }
 
 

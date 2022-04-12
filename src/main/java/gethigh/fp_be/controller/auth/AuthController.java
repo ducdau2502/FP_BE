@@ -6,17 +6,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
-import gethigh.fp_be.dao.request.LoginRequest;
-import gethigh.fp_be.dao.request.SignupRequest;
-import gethigh.fp_be.dao.response.JwtResponse;
-import gethigh.fp_be.dao.response.MessageResponse;
+import gethigh.fp_be.dto.request.LoginRequest;
+import gethigh.fp_be.dto.request.SignupRequest;
+import gethigh.fp_be.dto.response.JwtResponse;
+import gethigh.fp_be.dto.response.MessageResponse;
 import gethigh.fp_be.model.Account;
 import gethigh.fp_be.model.AccountRole;
 import gethigh.fp_be.model.num.EAccountRole;
 import gethigh.fp_be.repository.AccountRepo;
 import gethigh.fp_be.repository.AccountRoleRepo;
 import gethigh.fp_be.security.JwtUtils;
-import gethigh.fp_be.service.impl.AccountDetailIplm;
+import gethigh.fp_be.service.impl.AccountDetailImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,27 +32,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/auth/account")
+@RequestMapping("api/auth/account")
 public class AuthController {
 
     @Autowired
     AuthenticationManager authenticationManager;
+
     @Autowired
     AccountRepo accountRepo;
+
     @Autowired
     AccountRoleRepo accountRoleRepo;
+
     @Autowired
     PasswordEncoder encoder;
+
     @Autowired
     JwtUtils jwtUtils;
-    @PostMapping("/signin")
+
+    @PostMapping("/sign-in")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        AccountDetailIplm accountDetails = (AccountDetailIplm) authentication.getPrincipal();
+        AccountDetailImpl accountDetails = (AccountDetailImpl) authentication.getPrincipal();
         List<String> roles = accountDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
@@ -62,7 +67,7 @@ public class AuthController {
                 accountDetails.getEmail(),
                 roles));
     }
-    @PostMapping("/signup")
+    @PostMapping("/sign-up")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         if (accountRepo.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
@@ -83,7 +88,7 @@ public class AuthController {
         Set<String> strRoles = signUpRequest.getRole();
         Set<AccountRole> roles = new HashSet<>();
         if (strRoles == null) {
-            AccountRole accountRole= accountRoleRepo.findByName(EAccountRole.ROLE_CUSTOMER)
+            AccountRole accountRole = accountRoleRepo.findByName(EAccountRole.ROLE_CUSTOMER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(accountRole);
         } else {

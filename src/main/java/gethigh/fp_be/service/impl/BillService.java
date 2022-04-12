@@ -13,23 +13,24 @@ public class BillService implements IBillService {
     @Autowired
     BillRepo billRepo;
 
+
     @Override
     public Iterable<Bill> findAll() {
-       return billRepo.findAll();
-    }
-
-    @Override
-    public void save(Bill bill) {
-        billRepo.save(bill);
-    }
-
-    @Override
-    public void delete(Long id) {
-        billRepo.deleteById(id);
+        return billRepo.findAll();
     }
 
     @Override
     public Optional<Bill> findById(Long id) {
         return billRepo.findById(id);
+    }
+
+    @Override
+    public Bill save(Bill bill) {
+        return billRepo.save(bill);
+    }
+
+    @Override
+    public void remove(Long id) {
+        billRepo.deleteById(id);
     }
 }

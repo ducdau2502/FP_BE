@@ -1,4 +1,4 @@
-package gethigh.fp_be.dao.response;
+package gethigh.fp_be.dto.response;
 
 import java.util.List;
 

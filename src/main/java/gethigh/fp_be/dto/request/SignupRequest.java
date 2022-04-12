@@ -1,4 +1,4 @@
-package gethigh.fp_be.dao.request;
+package gethigh.fp_be.dto.request;
 
 import java.util.Set;
 

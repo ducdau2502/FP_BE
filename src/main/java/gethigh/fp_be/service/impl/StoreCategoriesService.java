@@ -13,23 +13,24 @@ public class StoreCategoriesService implements IStoreCategoriesService {
     @Autowired
     StoreCategoriesRepo storeCategoriesRepo;
 
+
     @Override
     public Iterable<StoreCategories> findAll() {
         return storeCategoriesRepo.findAll();
     }
 
     @Override
-    public void save(StoreCategories storeCategories) {
-        storeCategoriesRepo.save(storeCategories);
-    }
-
-    @Override
-    public void delete(Long id) {
-        storeCategoriesRepo.deleteById(id);
-    }
-
-    @Override
     public Optional<StoreCategories> findById(Long id) {
-        return Optional.empty();
+        return storeCategoriesRepo.findById(id);
+    }
+
+    @Override
+    public StoreCategories save(StoreCategories storeCategories) {
+        return storeCategoriesRepo.save(storeCategories);
+    }
+
+    @Override
+    public void remove(Long id) {
+        storeCategoriesRepo.deleteById(id);
     }
 }

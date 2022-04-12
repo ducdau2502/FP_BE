@@ -1,6 +1,6 @@
 package gethigh.fp_be.security;
 
-import gethigh.fp_be.service.impl.AccountDetailIplm;
+import gethigh.fp_be.service.impl.AccountDetailImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,9 +21,9 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication){
-        AccountDetailIplm AccountPrincical = (AccountDetailIplm) authentication.getPrincipal();
+        AccountDetailImpl accountPrincipal = (AccountDetailImpl) authentication.getPrincipal();
         return Jwts.builder()
-                .setSubject(AccountPrincical.getUsername())
+                .setSubject(accountPrincipal.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512,jwtSecret)

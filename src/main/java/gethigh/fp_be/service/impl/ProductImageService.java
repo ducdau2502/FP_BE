@@ -22,17 +22,17 @@ public class ProductImageService implements IProductImageService {
     }
 
     @Override
-    public void save(ProductImage productImage) {
-        productImageRepo.save(productImage);
-    }
-
-    @Override
-    public void delete(Long id) {
-        productImageRepo.deleteById(id);
-    }
-
-    @Override
     public Optional<ProductImage> findById(Long id) {
         return productImageRepo.findById(id);
+    }
+
+    @Override
+    public ProductImage save(ProductImage productImage) {
+        return productImageRepo.save(productImage);
+    }
+
+    @Override
+    public void remove(Long id) {
+        productImageRepo.deleteById(id);
     }
 }

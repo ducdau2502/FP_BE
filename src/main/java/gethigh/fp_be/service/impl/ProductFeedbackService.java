@@ -21,17 +21,17 @@ public class ProductFeedbackService implements IProductFeedbackService {
     }
 
     @Override
-    public void save(ProductFeedback productRating) {
-        productFeedbackRepo.save(productRating);
-    }
-
-    @Override
-    public void delete(Long id) {
-        productFeedbackRepo.deleteById(id);
-    }
-
-    @Override
     public Optional<ProductFeedback> findById(Long id) {
         return productFeedbackRepo.findById(id);
+    }
+
+    @Override
+    public ProductFeedback save(ProductFeedback productFeedback) {
+        return productFeedbackRepo.save(productFeedback);
+    }
+
+    @Override
+    public void remove(Long id) {
+        productFeedbackRepo.deleteById(id);
     }
 }

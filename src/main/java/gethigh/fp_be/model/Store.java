@@ -14,31 +14,23 @@ public class Store {
     private String avatar;
 
     @OneToOne
-    private AccountDetail storeOwer;
+    private AccountDetail storeOwner;
 
-    @OneToMany
-    private List<StoreCategories> categoriesList;
+//    @OneToMany
+//    private List<StoreCategories> categoriesList;
 
-    @OneToMany
-    private List<Product> productList;
+//    @OneToMany
+//    private List<Product> productList;
 
     public Store() {
     }
 
-    public Store(Long id,
-                 String name,
-                 String description,
-                 String avatar,
-                 AccountDetail storeOwer,
-                 List<StoreCategories> categoriesList,
-                 List<Product> productList) {
+    public Store(Long id, String name, String description, String avatar, AccountDetail storeOwner) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.avatar = avatar;
-        this.storeOwer = storeOwer;
-        this.categoriesList = categoriesList;
-        this.productList = productList;
+        this.storeOwner = storeOwner;
     }
 
     public Long getId() {
@@ -73,27 +65,11 @@ public class Store {
         this.avatar = avatar;
     }
 
-    public AccountDetail getStoreOwer() {
-        return storeOwer;
+    public AccountDetail getStoreOwner() {
+        return storeOwner;
     }
 
-    public void setStoreOwer(AccountDetail storeOwer) {
-        this.storeOwer = storeOwer;
-    }
-
-    public List<StoreCategories> getCategoriesList() {
-        return categoriesList;
-    }
-
-    public void setCategoriesList(List<StoreCategories> categoriesList) {
-        this.categoriesList = categoriesList;
-    }
-
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void setStoreOwner(AccountDetail storeOwner) {
+        this.storeOwner = storeOwner;
     }
 }

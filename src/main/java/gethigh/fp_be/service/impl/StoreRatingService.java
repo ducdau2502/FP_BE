@@ -13,23 +13,24 @@ public class StoreRatingService implements IStoreRatingService {
     @Autowired
     StoreRatingRepo storeRatingRepo;
 
+
     @Override
     public Iterable<StoreRating> findAll() {
         return storeRatingRepo.findAll();
     }
 
     @Override
-    public void save(StoreRating storeRating) {
-        storeRatingRepo.save(storeRating);
-    }
-
-    @Override
-    public void delete(Long id) {
-        storeRatingRepo.deleteById(id);
-    }
-
-    @Override
     public Optional<StoreRating> findById(Long id) {
         return storeRatingRepo.findById(id);
+    }
+
+    @Override
+    public StoreRating save(StoreRating storeRating) {
+        return storeRatingRepo.save(storeRating);
+    }
+
+    @Override
+    public void remove(Long id) {
+        storeRatingRepo.deleteById(id);
     }
 }

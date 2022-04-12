@@ -1,13 +1,15 @@
 package gethigh.fp_be.controller.auth;
 
-import gethigh.fp_be.dao.request.AcceptRequest;
+import gethigh.fp_be.dto.request.AcceptRequest;
 import gethigh.fp_be.model.Account;
+import gethigh.fp_be.model.AccountDetail;
 import gethigh.fp_be.model.AccountRole;
 import gethigh.fp_be.model.Store;
 import gethigh.fp_be.model.num.EAccountRole;
 import gethigh.fp_be.repository.AccountRepo;
 import gethigh.fp_be.repository.AccountRoleRepo;
 import gethigh.fp_be.service.IStoreService;
+import gethigh.fp_be.service.IAccountDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,7 @@ import java.util.Set;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/auth/admin/dashboard")
+@RequestMapping("api/auth/admin/dashboard")
 public class AdminDashboard {
 //khu vực quản lý các tác vụ hệ thống - huydu
 
@@ -28,6 +30,9 @@ public class AdminDashboard {
 
     @Autowired
     AccountRoleRepo roleRepo;
+
+    @Autowired
+    IAccountDetailService accountDetailService;
 
     @Autowired
     IStoreService iStoreService;
@@ -78,5 +83,17 @@ public class AdminDashboard {
         iStoreService.save(store);
         accountRepo.save(accountNew);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    //Block gian hàng
+    @PutMapping("/block-store/{store_id}")
+    public ResponseEntity<?> blockStore(@PathVariable("store_id") Long store_id) {
+        Optional<AccountDetail> accountDetail = accountDetailService.findById(store_id);
+        if (!accountDetail.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        accountDetail.get().setStatus("blocked");
+        accountDetailService.save(accountDetail.get());
+        return new ResponseEntity<>(accountDetail, HttpStatus.OK);
     }
 }
