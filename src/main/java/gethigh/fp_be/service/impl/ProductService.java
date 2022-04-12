@@ -34,8 +34,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Iterable<Product> top3ProductSale() {
-        return productRepo.top3ProductSale();
+    public Iterable<Product> topProductSale() {
+        return productRepo.topProductSale();
     }
 
     @Override

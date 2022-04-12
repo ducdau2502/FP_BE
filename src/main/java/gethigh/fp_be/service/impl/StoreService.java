@@ -1,5 +1,6 @@
 package gethigh.fp_be.service.impl;
 
+import gethigh.fp_be.dto.response.TopStoreSale;
 import gethigh.fp_be.model.Store;
 import gethigh.fp_be.repository.StoreRepo;
 import gethigh.fp_be.service.IStoreService;
@@ -32,6 +33,11 @@ public class StoreService implements IStoreService {
     @Override
     public void remove(Long id) {
         storeRepo.deleteById(id);
+    }
+
+    @Override
+    public Iterable<TopStoreSale> topStoreSale() {
+        return storeRepo.topStoreSale();
     }
 
     @Override

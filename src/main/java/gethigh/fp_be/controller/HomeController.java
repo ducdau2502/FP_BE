@@ -1,5 +1,6 @@
 package gethigh.fp_be.controller;
 
+import gethigh.fp_be.dto.response.TopStoreSale;
 import gethigh.fp_be.model.Product;
 import gethigh.fp_be.model.ProductFeedback;
 import gethigh.fp_be.model.Store;
@@ -128,11 +129,21 @@ public class HomeController {
 
     //Top 3 sản phẩm được bán nhiều nhất
     @GetMapping("/top-product-sale")
-    private ResponseEntity<?> top3ProductSale() {
-        Iterable<Product> products = productService.top3ProductSale();
+    private ResponseEntity<?> topProductSale() {
+        Iterable<Product> products = productService.topProductSale();
         if (!products.iterator().hasNext()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(products,HttpStatus.OK);
+    }
+
+    //Hiển thị 2 cửa hàng bán được nhiều sản phẩm nhất
+    @GetMapping("/top-store-sale")
+    private ResponseEntity<?> topStoreSale() {
+        Iterable<TopStoreSale> stores = iStoreService.topStoreSale();
+        if (!stores.iterator().hasNext()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(stores, HttpStatus.OK);
     }
 }
