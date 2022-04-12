@@ -4,8 +4,10 @@ import gethigh.fp_be.model.Product;
 import gethigh.fp_be.model.Store;
 import gethigh.fp_be.repository.ProductRepo;
 import gethigh.fp_be.repository.StoreRepo;
+import gethigh.fp_be.service.IProductService;
 import gethigh.fp_be.service.IStoreCategoriesService;
 import gethigh.fp_be.service.IStoreService;
+import gethigh.fp_be.service.impl.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -16,7 +18,7 @@ import java.util.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("api/auth/store")
+@RequestMapping("/store")
 public class StoreController {
 
     // khu vực thực hiện các tác vụ với store - huydu
@@ -29,6 +31,9 @@ public class StoreController {
 
     @Autowired
     StoreRepo storeRepo;
+
+    @Autowired
+    IProductService productService;
 
     // test phân quyền
     @Autowired
@@ -43,8 +48,10 @@ public class StoreController {
     // show all product with store
     @GetMapping("{id}/showProduct")
     private ResponseEntity<?> showAllProductInStore(@PathVariable("id") Long id){
-        Optional<Store> store = iStoreService.findById(id);
-        List<Product> products = store.get().getProductList();
+        Iterable<Product> products = productService.findAllByStore_Id(id);
+        if (!products.iterator().hasNext()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(products,HttpStatus.OK);
     }
 
@@ -53,7 +60,7 @@ public class StoreController {
     private ResponseEntity<?> searchProduct(@PathVariable("id") Long id, @Param("name") String name){
      Iterable<Product> products = productRepo.findAllByNameWithStore(id, name);
      if (!products.iterator().hasNext()){
-         new ResponseEntity<>(HttpStatus.NOT_FOUND);
+         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
      }
      return new ResponseEntity<>(products,HttpStatus.OK);
     }

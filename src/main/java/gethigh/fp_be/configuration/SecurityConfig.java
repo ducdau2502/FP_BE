@@ -54,11 +54,11 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter{
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/account/**").permitAll()
-                .antMatchers("/api/auth/home/**").anonymous()
-                .antMatchers("/api/auth/store/**").anonymous()
-                .antMatchers("/api/auth/admin/dashboard/**").hasRole("ADMIN")
-                .antMatchers("/api/auth/customer/dashboard/**").hasAnyRole("CUSTOMER","ADMIN")
-                .antMatchers("/api/auth/saler/dashboard/**").hasAnyRole("SALER","ADMIN")
+                .antMatchers("/home/**").anonymous()
+                .antMatchers("/store/**").anonymous()
+                .antMatchers("/admin/dashboard/**").hasRole("ADMIN")
+                .antMatchers("/customer/dashboard/**").hasAnyRole("CUSTOMER","ADMIN")
+                .antMatchers("/saler/dashboard/**").hasAnyRole("SALER","ADMIN")
                 .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

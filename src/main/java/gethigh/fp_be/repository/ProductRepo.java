@@ -14,4 +14,6 @@ public interface ProductRepo extends JpaRepository<Product,Long> {
             "where products.name like concat('%',:name,'%') \n" +
             "and stores_product_list.store_id = :id")
     Iterable<Product> findAllByNameWithStore(Long id, String name);
+
+    Iterable<Product> findAllByStore_Id(Long id);
 }

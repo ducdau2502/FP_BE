@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("api/auth/home")
+@RequestMapping("/home")
 public class HomeController {
 
     @Autowired

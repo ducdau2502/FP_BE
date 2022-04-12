@@ -21,7 +21,7 @@ import java.util.Set;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("api/auth/admin/dashboard")
+@RequestMapping("/admin/dashboard")
 public class AdminDashboard {
 //khu vực quản lý các tác vụ hệ thống - huydu
 
