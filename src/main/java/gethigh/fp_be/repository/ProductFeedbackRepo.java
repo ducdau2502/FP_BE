@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductFeedbackRepo extends JpaRepository<ProductFeedback,Long> {
+    Iterable<ProductFeedback> findAllByProductFeedback_Id(long id);
 }
