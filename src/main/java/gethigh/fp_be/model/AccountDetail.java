@@ -15,10 +15,8 @@ public class AccountDetail {
     private Long id;
     private String fullName;
     private Integer age;
-
     @Enumerated(EnumType.STRING)
     private EGender gender;
-
     private String address;
     private Integer identityCard;
     private String avatar;

@@ -13,10 +13,19 @@ public class ProductService implements IProductService {
     @Autowired
     ProductRepo productRepo;
 
-
     @Override
     public Iterable<Product> findAll() {
         return productRepo.findAll();
+    }
+
+    @Override
+    public Iterable<Product> findByName(String name) {
+        return productRepo.findAllByNameContaining(name);
+    }
+
+    @Override
+    public Iterable<Product> findAllByStore_Id(Long id) {
+        return productRepo.findAllByStore_Id(id);
     }
 
     @Override

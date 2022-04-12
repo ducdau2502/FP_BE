@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("api/auth/account")
+@RequestMapping("/api/auth/account")
 public class AuthController {
 
     @Autowired
@@ -85,7 +85,6 @@ public class AuthController {
                 signUpRequest.getEmail()
 
         );
-
         Set<String> strRoles = signUpRequest.getRole();
         Set<AccountRole> roles = new HashSet<>();
         if (strRoles == null) {
@@ -100,10 +99,10 @@ public class AuthController {
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
                         break;
-                    case "saler":
-                        AccountRole salerRole = accountRoleRepo.findByName(EAccountRole.ROLE_SALER)
+                    case "seller":
+                        AccountRole sellerRole = accountRoleRepo.findByName(EAccountRole.ROLE_SELLER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(salerRole);
+                        roles.add(sellerRole);
                         break;
                     default:
                         AccountRole customerRole = accountRoleRepo.findByName(EAccountRole.ROLE_CUSTOMER)
