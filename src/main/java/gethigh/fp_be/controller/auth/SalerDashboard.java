@@ -2,9 +2,11 @@ package gethigh.fp_be.controller.auth;
 
 import gethigh.fp_be.model.Product;
 import gethigh.fp_be.model.ProductImage;
+import gethigh.fp_be.model.StoreCategories;
 import gethigh.fp_be.service.IProductImageService;
 import gethigh.fp_be.service.IProductService;
 import gethigh.fp_be.service.IStoreService;
+import gethigh.fp_be.service.impl.StoreCategoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,9 @@ public class SalerDashboard {
     @Autowired
     private IProductImageService iProductImageService;
 
+    @Autowired
+    StoreCategoriesService storeCategoriesService;
+
     //hiển thị tất cả product của 1 cửa hàng
     @GetMapping("/{id}")
     public ResponseEntity<?> findAllProducts(@PathVariable("id") Long id) {
@@ -43,9 +48,19 @@ public class SalerDashboard {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    //hiển thị tất cả danh mục đang có sẵn
+    @GetMapping("/find-category")
+    public ResponseEntity<Iterable<StoreCategories>> findAllStoreCategories() {
+        Iterable<StoreCategories> storeCategories = storeCategoriesService.findAll();
+        if (storeCategories.iterator().hasNext()) {
+            return new ResponseEntity<>(storeCategories, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     //tìm sản phẩm theo tên
     @GetMapping("/find/{name}")
-    public ResponseEntity<Iterable<Product>> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<Iterable<Product>> findByName(@RequestParam("name") String name) {
         Iterable<Product> products = productService.findByName(name);
         if (products.iterator().hasNext()) {
             return new ResponseEntity<>(products, HttpStatus.OK);
