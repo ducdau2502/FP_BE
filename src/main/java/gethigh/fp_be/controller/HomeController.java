@@ -56,6 +56,27 @@ public class HomeController {
         }
     }
 
+    //tìm tất cả sản phẩm của cửa hàng
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findAllProductByStoreId(@PathVariable("id") Long id) {
+        Iterable<Product> products = productService.findAllByStore_Id(id);
+        if (products.iterator().hasNext()) {
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //tìm kiếm 1 sán phẩm
+    @GetMapping("/find-product/{id}")
+    public ResponseEntity<?> findProductById(@PathVariable("id") long id) {
+        Optional<Product> productOptional = productService.findById(id);
+        if (productOptional.isPresent()) {
+            return new ResponseEntity<>(productOptional.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new MessageResponse("product not found"), HttpStatus.NOT_FOUND);
+        }
+    }
+
     // tìm kiếm cửa hàng theo tên gần đúng
     @GetMapping("/search-stores")
     private ResponseEntity<?> findAllStoreByNameContaining(@RequestParam("search-store") String searchStore) {
@@ -82,6 +103,11 @@ public class HomeController {
     @PostMapping("/feed-back")
     private ResponseEntity<ProductFeedback> createFeedback(@RequestBody ProductFeedback productFeedback) {
         return new ResponseEntity<>(productFeedbackService.save(productFeedback), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/feed-back/count-fb/{id}")
+    private ResponseEntity<?> countFeedback(@PathVariable("id") long id) {
+        return new ResponseEntity<>(productFeedbackService.countFeedbackByIdProduct(id), HttpStatus.CREATED);
     }
 
     // show feedback theo sản phẩm
@@ -113,8 +139,8 @@ public class HomeController {
     }
 
     //search with product name
-    @GetMapping("/search/{name}")
-    private ResponseEntity<?> searchProduct(@Param("name") String name){
+    @GetMapping("/search")
+    private ResponseEntity<?> searchProduct(@RequestParam("name") String name){
         Iterable<Product> products = productService.findByName(name);
         if (!products.iterator().hasNext()){
             new ResponseEntity<>(HttpStatus.NOT_FOUND);
