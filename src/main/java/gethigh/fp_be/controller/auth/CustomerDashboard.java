@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/customer/dashboard")
+@RequestMapping("customer/dashboard")
 public class CustomerDashboard {
 //khu vực quản lý các tác vụ quản lý của khách hàng -huydu
 
