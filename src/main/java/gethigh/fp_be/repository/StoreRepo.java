@@ -6,13 +6,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface StoreRepo extends JpaRepository<Store,Long> {
     //Hiển thị 2 cửa hàng bán được nhiều sản phẩm nhất
-    @Query(nativeQuery = true, value = "select stores.id, stores.name, stores.avatar, sum(sold_quantity) sumQ from shopbi.products \n" +
-            "join stores on products.store_id = stores.store_owner_id\n" +
-            "group by store_id order by sumQ desc limit 2;")
-    Iterable<TopStoreSale> topStoreSale();
+    @Query(nativeQuery = true, value = "select stores.id from shopbi.products\n" +
+            "join shopbi.stores on products.store_id = stores.id\n" +
+            "group by store_id order by sum(products.sold_quantity) desc limit 2;")
+    List<Long> topStoreSale();
 
     Iterable<Store> findAllByNameContaining(String name);
+
+    Iterable<Store> findAllByCategoriesList_Id(Long id);
 }

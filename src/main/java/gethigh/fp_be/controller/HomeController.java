@@ -4,8 +4,10 @@ import gethigh.fp_be.dto.response.TopStoreSale;
 import gethigh.fp_be.model.Product;
 import gethigh.fp_be.model.ProductFeedback;
 import gethigh.fp_be.model.Store;
+import gethigh.fp_be.model.StoreCategories;
 import gethigh.fp_be.service.IProductFeedbackService;
 import gethigh.fp_be.service.IProductService;
+import gethigh.fp_be.service.IStoreCategoriesService;
 import gethigh.fp_be.service.IStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +39,9 @@ public class HomeController {
     @Autowired
     IProductFeedbackService productFeedbackService;
 
+    @Autowired
+    IStoreCategoriesService categoriesService;
+
     // test phân quyền
     @GetMapping("/show")
     private String showPage(){
@@ -49,6 +54,28 @@ public class HomeController {
         Optional<Store> storeOptional = storeService.findById(id);
         if (storeOptional.isPresent()) {
             return new ResponseEntity<>(storeOptional.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new MessageResponse("store not found"), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // tìm kiếm cửa hàng theo category
+    @GetMapping("/find-store-by-category/{id}")
+    public ResponseEntity<?> findAllByCategoriesList_Id(@PathVariable("id") long id) {
+        Iterable<Store> stores = storeService.findAllByCategoriesList_Id(id);
+        if (stores.iterator().hasNext()) {
+            return new ResponseEntity<>(stores, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new MessageResponse("store not found"), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // get all category
+    @GetMapping("/list-category")
+    public ResponseEntity<?> getAllCategories() {
+        Iterable<StoreCategories> category = categoriesService.findAll();
+        if (category.iterator().hasNext()) {
+            return new ResponseEntity<>(category, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new MessageResponse("store not found"), HttpStatus.NOT_FOUND);
         }
@@ -159,7 +186,7 @@ public class HomeController {
     //Hiển thị 2 cửa hàng bán được nhiều sản phẩm nhất
     @GetMapping("/top-store-sale")
     private ResponseEntity<?> topStoreSale() {
-        Iterable<TopStoreSale> stores = iStoreService.topStoreSale();
+        Iterable<Store> stores = iStoreService.topStoreSale();
         if (!stores.iterator().hasNext()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
