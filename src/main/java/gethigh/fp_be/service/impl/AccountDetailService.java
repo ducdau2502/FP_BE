@@ -25,6 +25,7 @@ public class AccountDetailService implements IAccountDetailService {
         return accountDetailRepo.findById(id);
     }
 
+
     @Override
     public AccountDetail save(AccountDetail accountDetail) {
         return accountDetailRepo.save(accountDetail);

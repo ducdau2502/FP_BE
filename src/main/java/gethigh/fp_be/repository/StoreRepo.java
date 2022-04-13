@@ -4,7 +4,10 @@ import gethigh.fp_be.dto.response.TopStoreSale;
 import gethigh.fp_be.model.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface StoreRepo extends JpaRepository<Store,Long> {
@@ -15,4 +18,7 @@ public interface StoreRepo extends JpaRepository<Store,Long> {
     Iterable<TopStoreSale> topStoreSale();
 
     Iterable<Store> findAllByNameContaining(String name);
+
+    @Query(nativeQuery = true,value = "select * from stores where name like concat('%',:name,'%')")
+    List<Store> findStoreByName(@Param("name") String name);
 }

@@ -7,6 +7,7 @@ import gethigh.fp_be.service.IStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,5 +44,10 @@ public class StoreService implements IStoreService {
     @Override
     public Iterable<Store> findAllByNameContaining(String name) {
         return storeRepo.findAllByNameContaining(name);
+    }
+
+    @Override
+    public List<Store> findStoreByName(String name) {
+        return storeRepo.findStoreByName(name);
     }
 }
