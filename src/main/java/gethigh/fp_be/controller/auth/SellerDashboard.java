@@ -128,6 +128,7 @@ public class SellerDashboard {
     }
 
     //xóa 1 sản phẩm
+    //xử lý git
     @DeleteMapping("/delete-product/{id_product}")
     public ResponseEntity<Product> deleteProduct(@PathVariable("id_product") Long id) {
         Optional<Product> product = productService.findById(id);
