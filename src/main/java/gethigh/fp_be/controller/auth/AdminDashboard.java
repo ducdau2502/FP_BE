@@ -84,19 +84,23 @@ public class AdminDashboard {
     }
 
     //Block gian hàng
-    @PutMapping("/block-store/{store_id}")
+    @GetMapping("/block-store/{store_id}")
     public ResponseEntity<?> blockStore(@PathVariable("store_id") Long store_id) {
         Optional<AccountDetail> accountDetail = accountDetailService.findById(store_id);
         if (!accountDetail.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        accountDetail.get().setStatus("blocked");
+        if (accountDetail.get().getStatus().equals("blocked")) {
+            accountDetail.get().setStatus("normal");
+        } else {
+            accountDetail.get().setStatus("blocked");
+        }
         accountDetailService.save(accountDetail.get());
         return new ResponseEntity<>(accountDetail, HttpStatus.OK);
     }
 
     //xem danh sách tài khoản trong hệ thống
-    @GetMapping("/search-account")
+    @GetMapping("/list-account")
     public ResponseEntity<Iterable<AccountDetail>> findAllAccount() {
         Iterable<AccountDetail> accountDetails = accountDetailService.findAll();
         if (accountDetails.iterator().hasNext()) {
@@ -105,15 +109,20 @@ public class AdminDashboard {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //tìm kiếm theo tên cửa hàng
-    @GetMapping("/search-store/{name}")
-    public ResponseEntity<Iterable<Store>> findStoreByName(@RequestParam("name") String name) {
-        Iterable<Store> stores;
-        if (name == "") {
-            stores = iStoreService.findAll();
-        } else {
-            stores = iStoreService.findAllByNameContaining(name);
+    //xem danh sách cửa hành
+    @GetMapping("/list-store")
+    public ResponseEntity<Iterable<Store>> findAllStore() {
+        Iterable<Store> stores = iStoreService.findAll();
+        if (stores.iterator().hasNext()) {
+            return new ResponseEntity<>(stores, HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //tìm kiếm theo tên cửa hàng
+    @GetMapping("/search-store")
+    public ResponseEntity<Iterable<Store>> findStoreByName(@RequestParam("name") String name) {
+        Iterable<Store> stores = iStoreService.findAllByNameContaining(name);
         if (!stores.iterator().hasNext()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
@@ -122,7 +131,7 @@ public class AdminDashboard {
     }
 
     //Xem chi tiết thông tin tài khoản
-    @GetMapping("/search-detail-account/{id}")
+    @GetMapping("/detail-account/{id}")
     public ResponseEntity<AccountDetail> findAccountById(@PathVariable("id") Long id) {
         Optional<AccountDetail> accountDetail = accountDetailService.findById(id);
         if (accountDetail.isPresent()) {
