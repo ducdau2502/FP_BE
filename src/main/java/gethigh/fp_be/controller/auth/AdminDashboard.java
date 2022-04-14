@@ -92,7 +92,7 @@ public class AdminDashboard {
         }
         if (accountDetail.get().getStatus().equals("blocked")) {
             accountDetail.get().setStatus("normal");
-        } else {
+        } else if (accountDetail.get().getStatus().equals("normal")) {
             accountDetail.get().setStatus("blocked");
         }
         accountDetailService.save(accountDetail.get());
