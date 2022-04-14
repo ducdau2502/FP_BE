@@ -44,4 +44,9 @@ public class ProductImageService implements IProductImageService {
     public Iterable<ProductImage> findAllByProductId(Long id) {
         return productImageRepo.findAllByProductId(id);
     }
+
+    @Override
+    public Optional<ProductImage> findByProduct_Id(Long id) {
+        return productImageRepo.findByProduct_Id(id);
+    }
 }
