@@ -1,6 +1,8 @@
 package gethigh.fp_be.model;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "product_images")
@@ -8,10 +10,7 @@ public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    @Lob
-    private String type;
-    private byte[] data;
+    private String url;
 
     @ManyToOne
     private Product product;
@@ -19,10 +18,9 @@ public class ProductImage {
     public ProductImage() {
     }
 
-    public ProductImage(String name, String type, byte[] data) {
-        this.name = name;
-        this.type = type;
-        this.data = data;
+    public ProductImage(String url, Product product) {
+        this.url = url;
+        this.product = product;
     }
 
     public Long getId() {
@@ -33,22 +31,13 @@ public class ProductImage {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUrl() {
+        return url;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUrl(String url) {
+        this.url = url;
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
 
     public Product getProduct() {
         return product;
@@ -56,13 +45,5 @@ public class ProductImage {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
     }
 }

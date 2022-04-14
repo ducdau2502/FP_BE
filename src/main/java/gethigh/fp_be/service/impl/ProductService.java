@@ -29,6 +29,16 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public Iterable<Product> findAllByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(Double lowerPrice, Double upperPrice) {
+        return productRepo.findAllByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(lowerPrice, upperPrice);
+    }
+
+    @Override
+    public Iterable<Product> topProductSale() {
+        return productRepo.topProductSale();
+    }
+
+    @Override
     public Optional<Product> findById(Long id) {
         return productRepo.findById(id);
     }

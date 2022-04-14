@@ -32,6 +32,22 @@ public class Product {
         this.store = store;
     }
 
+    public Product(String name, Double price, Integer inventoryQuantity, Integer soldQuantity, String description, Store store) {
+        this.name = name;
+        this.price = price;
+        this.inventoryQuantity = inventoryQuantity;
+        this.soldQuantity = soldQuantity;
+        this.description = description;
+        this.store = store;
+    }
+
+    public Product(String name, Double price, Integer inventoryQuantity, String description) {
+        this.name = name;
+        this.price = price;
+        this.inventoryQuantity = inventoryQuantity;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }

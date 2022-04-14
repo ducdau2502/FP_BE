@@ -18,8 +18,8 @@ public class BillDetail {
 
 
     // cần xem lại
-    @OneToMany
-    private List<Product> product;
+    @ManyToOne
+    private Product product;
 
     @ManyToOne
     private Bill bill;

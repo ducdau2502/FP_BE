@@ -1,12 +1,15 @@
 package gethigh.fp_be.controller;
 
+import gethigh.fp_be.dto.response.TopStoreSale;
 import gethigh.fp_be.model.Product;
+import gethigh.fp_be.model.ProductFeedback;
 import gethigh.fp_be.model.Store;
+import gethigh.fp_be.model.StoreCategories;
+import gethigh.fp_be.service.IProductFeedbackService;
 import gethigh.fp_be.service.IProductService;
+import gethigh.fp_be.service.IStoreCategoriesService;
 import gethigh.fp_be.service.IStoreService;
-import gethigh.fp_be.service.impl.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,11 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import gethigh.fp_be.dto.response.MessageResponse;
-import gethigh.fp_be.model.Store;
-import gethigh.fp_be.service.IStoreService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -38,6 +36,12 @@ public class HomeController {
     @Autowired
     IProductService productService;
 
+    @Autowired
+    IProductFeedbackService productFeedbackService;
+
+    @Autowired
+    IStoreCategoriesService categoriesService;
+
     // test phân quyền
     @GetMapping("/show")
     private String showPage(){
@@ -55,7 +59,92 @@ public class HomeController {
         }
     }
 
+    // tìm kiếm cửa hàng theo category
+    @GetMapping("/find-store-by-category/{id}")
+    public ResponseEntity<?> findAllByCategoriesList_Id(@PathVariable("id") long id) {
+        Iterable<Store> stores = storeService.findAllByCategoriesList_Id(id);
+        if (stores.iterator().hasNext()) {
+            return new ResponseEntity<>(stores, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new MessageResponse("store not found"), HttpStatus.NOT_FOUND);
+        }
+    }
 
+    // get all category
+    @GetMapping("/list-category")
+    public ResponseEntity<?> getAllCategories() {
+        Iterable<StoreCategories> category = categoriesService.findAll();
+        if (category.iterator().hasNext()) {
+            return new ResponseEntity<>(category, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new MessageResponse("store not found"), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //tìm tất cả sản phẩm của cửa hàng
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findAllProductByStoreId(@PathVariable("id") Long id) {
+        Iterable<Product> products = productService.findAllByStore_Id(id);
+        if (products.iterator().hasNext()) {
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //tìm kiếm 1 sán phẩm
+    @GetMapping("/find-product/{id}")
+    public ResponseEntity<?> findProductById(@PathVariable("id") long id) {
+        Optional<Product> productOptional = productService.findById(id);
+        if (productOptional.isPresent()) {
+            return new ResponseEntity<>(productOptional.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new MessageResponse("product not found"), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // tìm kiếm cửa hàng theo tên gần đúng
+    @GetMapping("/search-stores")
+    private ResponseEntity<?> findAllStoreByNameContaining(@RequestParam("search-store") String searchStore) {
+        Iterable<Store> storeIterable = storeService.findAllByNameContaining(searchStore);
+        if (storeIterable.iterator().hasNext()) {
+            return new ResponseEntity<>(storeIterable, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new MessageResponse("stores not found"), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // tìm kiếm sản phẩm theo khoảng giá
+    @GetMapping("/search-products/{lower}/{upper}")
+    private ResponseEntity<?> findAllProductByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(@PathVariable("lower") Double lower, @PathVariable("upper") Double upper) {
+        Iterable<Product> products = productService.findAllByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(lower, upper);
+        if (products.iterator().hasNext()) {
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new MessageResponse("products not found"), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // feedback 1 sản phẩm
+    @PostMapping("/feed-back")
+    private ResponseEntity<ProductFeedback> createFeedback(@RequestBody ProductFeedback productFeedback) {
+        return new ResponseEntity<>(productFeedbackService.save(productFeedback), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/feed-back/count-fb/{id}")
+    private ResponseEntity<?> countFeedback(@PathVariable("id") long id) {
+        return new ResponseEntity<>(productFeedbackService.countFeedbackByIdProduct(id), HttpStatus.CREATED);
+    }
+
+    // show feedback theo sản phẩm
+    @GetMapping("/feed-back/{id}")
+    private ResponseEntity<?> showFeedbackByProduct(@PathVariable("id") Long id) {
+        Iterable<ProductFeedback> productFeedbacks = productFeedbackService.findAllByProductFeedback_Id(id);
+        if (productFeedbacks.iterator().hasNext()) {
+            return new ResponseEntity<>(productFeedbacks, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new MessageResponse("no feedback"), HttpStatus.NOT_FOUND);
+        }
+    }
 
     //show all store
     @GetMapping("/showAllStore")
@@ -75,8 +164,8 @@ public class HomeController {
     }
 
     //search with product name
-    @GetMapping("/search/{name}")
-    private ResponseEntity<?> searchProduct(@Param("name") String name){
+    @GetMapping("/search")
+    private ResponseEntity<?> searchProduct(@RequestParam("name") String name){
         Iterable<Product> products = productService.findByName(name);
         if (!products.iterator().hasNext()){
             new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -84,5 +173,23 @@ public class HomeController {
         return new ResponseEntity<>(products,HttpStatus.OK);
     }
 
+    //Top 3 sản phẩm được bán nhiều nhất
+    @GetMapping("/top-product-sale")
+    private ResponseEntity<?> topProductSale() {
+        Iterable<Product> products = productService.topProductSale();
+        if (!products.iterator().hasNext()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(products,HttpStatus.OK);
+    }
 
+    //Hiển thị 2 cửa hàng bán được nhiều sản phẩm nhất
+    @GetMapping("/top-store-sale")
+    private ResponseEntity<?> topStoreSale() {
+        Iterable<Store> stores = iStoreService.topStoreSale();
+        if (!stores.iterator().hasNext()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(stores, HttpStatus.OK);
+    }
 }

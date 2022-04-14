@@ -34,4 +34,14 @@ public class ProductFeedbackService implements IProductFeedbackService {
     public void remove(Long id) {
         productFeedbackRepo.deleteById(id);
     }
+
+    @Override
+    public Iterable<ProductFeedback> findAllByProductFeedback_Id(long id) {
+        return productFeedbackRepo.findAllByProductFeedback_Id(id);
+    }
+
+    @Override
+    public String countFeedbackByIdProduct(Long id) {
+        return productFeedbackRepo.countFeedbackByIdProduct(id);
+    }
 }
