@@ -31,7 +31,7 @@ public class AccountDetail {
     public AccountDetail() {
     }
 
-    public AccountDetail(Long id,
+    public AccountDetail(
                          String fullName,
                          Integer age,
                          EGender gender,
@@ -42,7 +42,6 @@ public class AccountDetail {
                          Integer bankAccount,
                          String status,
                          Account account) {
-        this.id = id;
         this.fullName = fullName;
         this.age = age;
         this.gender = gender;

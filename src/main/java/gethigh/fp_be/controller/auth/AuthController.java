@@ -11,11 +11,13 @@ import gethigh.fp_be.dto.request.SignupRequest;
 import gethigh.fp_be.dto.response.JwtResponse;
 import gethigh.fp_be.dto.response.MessageResponse;
 import gethigh.fp_be.model.Account;
+import gethigh.fp_be.model.AccountDetail;
 import gethigh.fp_be.model.AccountRole;
 import gethigh.fp_be.model.num.EAccountRole;
 import gethigh.fp_be.repository.AccountRepo;
 import gethigh.fp_be.repository.AccountRoleRepo;
 import gethigh.fp_be.security.JwtUtils;
+import gethigh.fp_be.service.IAccountDetailService;
 import gethigh.fp_be.service.impl.AccountDetailImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +48,9 @@ public class AuthController {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    IAccountDetailService accountDetailService;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -112,7 +117,20 @@ public class AuthController {
             });
         }
         account.setRoles(roles);
-        accountRepo.save(account);
+        Account acc = accountRepo.save(account);
+        AccountDetail accountDetail = new AccountDetail(
+                signUpRequest.getFullName(),
+                signUpRequest.getAge(),
+                signUpRequest.getGender(),
+                signUpRequest.getAddress(),
+                signUpRequest.getIdentityCard(),
+                signUpRequest.getAvatar(),
+                signUpRequest.getDateCreate(),
+                signUpRequest.getBankAccount(),
+                signUpRequest.getStatus(),
+                acc
+        );
+        accountDetailService.save(accountDetail);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 }
