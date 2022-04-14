@@ -164,4 +164,10 @@ public class SellerDashboard {
         productService.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/product/{id_product}")
+    public ResponseEntity<Product> getProduct(@PathVariable("id_product") Long id) {
+        Optional<Product> productOptional = productService.findById(id);
+        return productOptional.map(product -> new ResponseEntity<>(product, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 }
