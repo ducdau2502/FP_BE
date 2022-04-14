@@ -1,20 +1,16 @@
 package gethigh.fp_be.controller;
 
 import gethigh.fp_be.model.Product;
-import gethigh.fp_be.model.Store;
 import gethigh.fp_be.repository.ProductRepo;
 import gethigh.fp_be.repository.StoreRepo;
 import gethigh.fp_be.service.IProductService;
 import gethigh.fp_be.service.IStoreCategoriesService;
 import gethigh.fp_be.service.IStoreService;
-import gethigh.fp_be.service.impl.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 @RestController
 @CrossOrigin("*")
