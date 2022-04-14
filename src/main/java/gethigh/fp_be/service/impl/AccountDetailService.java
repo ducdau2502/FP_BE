@@ -34,4 +34,9 @@ public class AccountDetailService implements IAccountDetailService {
     public void remove(Long id) {
         accountDetailRepo.deleteById(id);
     }
+
+    @Override
+    public Optional<AccountDetail> findByAccount_Id(Long accountId) {
+        return accountDetailRepo.findByAccount_Id(accountId);
+    }
 }
