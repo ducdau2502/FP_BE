@@ -38,6 +38,11 @@ public class StoreService implements IStoreService {
     }
 
     @Override
+    public Optional<Store> findStoreByStoreOwner_Id(Long id) {
+        return storeRepo.findStoreByStoreOwner_Id(id);
+    }
+
+    @Override
     public Iterable<Store> findAllByCategoriesList_Id(Long id) {
         return storeRepo.findAllByCategoriesList_Id(id);
     }

@@ -28,6 +28,9 @@ public class HomeController {
     IStoreService iStoreService;
 
     @Autowired
+    IAccountDetailService accountDetailService;
+
+    @Autowired
     IProductService productService;
 
     @Autowired
@@ -198,5 +201,23 @@ public class HomeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(stores, HttpStatus.OK);
+    }
+
+    @GetMapping("/detail-account/{id}")
+    public ResponseEntity<AccountDetail> findAccountById(@PathVariable("id") Long id) {
+        Optional<AccountDetail> accountDetail = accountDetailService.findById(id);
+        if (accountDetail.isPresent()) {
+            return new ResponseEntity<>(accountDetail.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/detail-store/{id}")
+    public ResponseEntity<Store> findStoreById(@PathVariable("id") Long id) {
+        Optional<Store> store = storeService.findStoreByStoreOwner_Id(id);
+        if (store.isPresent()) {
+            return new ResponseEntity<>(store.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
