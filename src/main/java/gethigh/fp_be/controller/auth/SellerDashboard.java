@@ -119,16 +119,27 @@ public class SellerDashboard {
 
     //Làm việc với image-product
     @PostMapping("/save-image")
-    public ResponseEntity<?> saveImage(@RequestBody ImageForm imageForm) {
-        for (int i = 0; i < imageForm.getImageList().size(); i++) {
-            iProductImageService.save(new ProductImage(imageForm.getImageList().get(i), imageForm.getProduct()));
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> saveImage(@RequestBody ProductImage image) {
+//        for (int i = 0; i < imageForm.getImageList().size(); i++) {
+//            iProductImageService.save(new ProductImage(imageForm.getImageList().get(i), imageForm.getProduct()));
+//        }
+
+        return new ResponseEntity<>(iProductImageService.save(image), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete-image/{id}")
     public void deleteImage(@PathVariable("id") Long id) {
         iProductImageService.remove(id);
+    }
+
+    //Tìm ảnh của sản phẩm
+    @GetMapping("/get-image/{id_product}")
+    public ResponseEntity<?> getImage(@PathVariable("id_product") Long id_product) {
+        Optional<ProductImage> productImage = iProductImageService.findByProduct_Id(id_product);
+        if (!productImage.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(productImage, HttpStatus.OK);
     }
 
     //Làm việc với product
@@ -152,5 +163,11 @@ public class SellerDashboard {
         }
         productService.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/product/{id_product}")
+    public ResponseEntity<Product> getProduct(@PathVariable("id_product") Long id) {
+        Optional<Product> productOptional = productService.findById(id);
+        return productOptional.map(product -> new ResponseEntity<>(product, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
