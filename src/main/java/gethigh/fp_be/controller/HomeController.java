@@ -1,14 +1,8 @@
 package gethigh.fp_be.controller;
 
 import gethigh.fp_be.dto.response.TopStoreSale;
-import gethigh.fp_be.model.Product;
-import gethigh.fp_be.model.ProductFeedback;
-import gethigh.fp_be.model.Store;
-import gethigh.fp_be.model.StoreCategories;
-import gethigh.fp_be.service.IProductFeedbackService;
-import gethigh.fp_be.service.IProductService;
-import gethigh.fp_be.service.IStoreCategoriesService;
-import gethigh.fp_be.service.IStoreService;
+import gethigh.fp_be.model.*;
+import gethigh.fp_be.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +29,9 @@ public class HomeController {
 
     @Autowired
     IProductService productService;
+
+    @Autowired
+    IProductImageService productImageService;
 
     @Autowired
     IProductFeedbackService productFeedbackService;
@@ -79,6 +76,16 @@ public class HomeController {
         } else {
             return new ResponseEntity<>(new MessageResponse("store not found"), HttpStatus.NOT_FOUND);
         }
+    }
+
+    //Tìm ảnh của sản phẩm
+    @GetMapping("/get-image/{id_product}")
+    public ResponseEntity<?> getImage(@PathVariable("id_product") Long id_product) {
+        Optional<ProductImage> productImage = productImageService.findByProduct_Id(id_product);
+        if (!productImage.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(productImage, HttpStatus.OK);
     }
 
     //tìm tất cả sản phẩm của cửa hàng
