@@ -90,10 +90,10 @@ public class AdminDashboard {
         if (!accountDetail.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if (accountDetail.get().getStatus().equals("blocked")) {
-            accountDetail.get().setStatus("normal");
-        } else if (accountDetail.get().getStatus().equals("normal")) {
-            accountDetail.get().setStatus("blocked");
+        if (accountDetail.get().getStatus().equals("Blocked")) {
+            accountDetail.get().setStatus("Activated");
+        } else if (accountDetail.get().getStatus().equals("Activated")) {
+            accountDetail.get().setStatus("Blocked");
         }
         accountDetailService.save(accountDetail.get());
         return new ResponseEntity<>(accountDetail, HttpStatus.OK);

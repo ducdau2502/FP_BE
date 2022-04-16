@@ -149,11 +149,7 @@ public class HomeController {
     @GetMapping("/feed-back/{id}")
     private ResponseEntity<?> showFeedbackByProduct(@PathVariable("id") Long id) {
         Iterable<ProductFeedback> productFeedbacks = productFeedbackService.findAllByProductFeedback_Id(id);
-        if (productFeedbacks.iterator().hasNext()) {
-            return new ResponseEntity<>(productFeedbacks, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new MessageResponse("no feedback"), HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(productFeedbacks, HttpStatus.OK);
     }
 
     //show all store
