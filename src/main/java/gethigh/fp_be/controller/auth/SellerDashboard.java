@@ -172,13 +172,20 @@ public class SellerDashboard {
     }
 
     //Gán category cho store
-    @PostMapping("/store/{id_store}")
-    public ResponseEntity<Store> saveCategory(@PathVariable("id_store") Long id, @RequestBody StoreCategories category) {
-        Optional<Store> store = iStoreService.findById(id);
+    @GetMapping("/store/{id_store}/{id_category}")
+    public ResponseEntity<Store> saveCategory(@PathVariable("id_store") Long id_store, @PathVariable("id_category") Long id_category) {
+        Optional<Store> store = iStoreService.findById(id_store);
+        Optional<StoreCategories> category = storeCategoriesService.findById(id_category);
         if (!store.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        store.get().setCategoriesList(category);
+        store.get().setCategoriesList(category.get());
         return new ResponseEntity<>(iStoreService.save(store.get()), HttpStatus.OK);
+    }
+
+    //tạo category cho store
+    @PostMapping("/create-category")
+    public ResponseEntity<StoreCategories> create(@RequestBody StoreCategories category) {
+        return new ResponseEntity<>(storeCategoriesService.save(category), HttpStatus.OK);
     }
 }
