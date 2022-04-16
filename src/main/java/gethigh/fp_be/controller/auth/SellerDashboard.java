@@ -170,4 +170,15 @@ public class SellerDashboard {
         Optional<Product> productOptional = productService.findById(id);
         return productOptional.map(product -> new ResponseEntity<>(product, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    //Gán category cho store
+    @PostMapping("/store/{id_store}")
+    public ResponseEntity<Store> saveCategory(@PathVariable("id_store") Long id, @RequestBody StoreCategories category) {
+        Optional<Store> store = iStoreService.findById(id);
+        if (!store.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        store.get().setCategoriesList(category);
+        return new ResponseEntity<>(iStoreService.save(store.get()), HttpStatus.OK);
+    }
 }

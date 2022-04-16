@@ -34,6 +34,11 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public Iterable<Product> findAllByStore_IdAndNameContaining(Long id, String name) {
+        return productRepo.findAllByStore_IdAndNameContaining(id, name);
+    }
+
+    @Override
     public Iterable<Product> topProductSale() {
         return productRepo.topProductSale();
     }
