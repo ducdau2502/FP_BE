@@ -12,12 +12,21 @@ public class Bill {
     private Long id;
     private LocalDate dateCreate;
 
+    private Long quantity;
+
+    private Double totalPrice;
 
     @ManyToOne
     private AccountDetail customer;
 
     @ManyToOne
     private Store storeBuy;
+
+    @ManyToOne
+    private Product product;
+
+    @ManyToOne
+    private Voucher voucher;
 
     public Bill() {
     }
@@ -30,6 +39,17 @@ public class Bill {
         this.dateCreate = dateCreate;
         this.customer = customer;
         this.storeBuy = storeBuy;
+    }
+
+    public Bill(Long id, LocalDate dateCreate, Long quantity, Double totalPrice, AccountDetail customer, Store storeBuy, Product product, Voucher voucher) {
+        this.id = id;
+        this.dateCreate = dateCreate;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+        this.customer = customer;
+        this.storeBuy = storeBuy;
+        this.product = product;
+        this.voucher = voucher;
     }
 
     public Long getId() {
@@ -62,5 +82,37 @@ public class Bill {
 
     public void setStoreBuy(Store storeBuy) {
         this.storeBuy = storeBuy;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Voucher getVoucher() {
+        return voucher;
+    }
+
+    public void setVoucher(Voucher voucher) {
+        this.voucher = voucher;
     }
 }
