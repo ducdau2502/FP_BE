@@ -22,4 +22,6 @@ public interface ProductRepo extends JpaRepository<Product,Long> {
     //Hiển thị 3 sản phẩm được bán nhiều nhất
     @Query(nativeQuery = true, value = "select * from products order by products.sold_quantity desc limit 3;")
     Iterable<Product> topProductSale();
+
+    Iterable<Product> findAllByStore_IdAndNameContaining(Long id, String name);
 }

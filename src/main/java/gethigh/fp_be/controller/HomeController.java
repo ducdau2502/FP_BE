@@ -73,9 +73,9 @@ public class HomeController {
     // get all category
     @GetMapping("/list-category")
     public ResponseEntity<?> getAllCategories() {
-        Iterable<StoreCategories> category = categoriesService.findAll();
-        if (category.iterator().hasNext()) {
-            return new ResponseEntity<>(category, HttpStatus.OK);
+        Iterable<StoreCategories> categories = categoriesService.findAll();
+        if (categories.iterator().hasNext()) {
+            return new ResponseEntity<>(categories, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new MessageResponse("store not found"), HttpStatus.NOT_FOUND);
         }
