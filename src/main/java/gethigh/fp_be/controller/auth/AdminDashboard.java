@@ -7,15 +7,17 @@ import gethigh.fp_be.repository.AccountRepo;
 import gethigh.fp_be.repository.AccountRoleRepo;
 import gethigh.fp_be.service.IStoreService;
 import gethigh.fp_be.service.IAccountDetailService;
-import gethigh.fp_be.service.impl.StoreCategoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @CrossOrigin("*")
@@ -34,6 +36,16 @@ public class AdminDashboard {
 
     @Autowired
     IStoreService iStoreService;
+
+    private Sort.Direction getSortDirection(String direction) {
+        if (direction.equals("asc")) {
+            return Sort.Direction.ASC;
+        } else if (direction.equals("desc")) {
+            return Sort.Direction.DESC;
+        }
+
+        return Sort.Direction.ASC;
+    }
 
     // test phân quyền
     @GetMapping("/show")
@@ -100,14 +112,57 @@ public class AdminDashboard {
     }
 
     //xem danh sách tài khoản trong hệ thống
+//    @GetMapping("/list-account")
+//    public ResponseEntity<Iterable<AccountDetail>> findAllAccount() {
+//        Iterable<AccountDetail> accountDetails = accountDetailService.findAll();
+//        if (accountDetails.iterator().hasNext()) {
+//            return new ResponseEntity<>(accountDetails, HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
+
     @GetMapping("/list-account")
-    public ResponseEntity<Iterable<AccountDetail>> findAllAccount() {
-        Iterable<AccountDetail> accountDetails = accountDetailService.findAll();
-        if (accountDetails.iterator().hasNext()) {
-            return new ResponseEntity<>(accountDetails, HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> getListAccount(
+        @RequestParam(required = false) String fullName,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "3") int size,
+        @RequestParam(defaultValue = "id,desc") String[] sort) {
+
+            try {
+                List<Order> orders = new ArrayList<>();
+
+                if (sort[0].contains(",")) {
+                    for (String sortOrder : sort) {
+                        String[] _sort = sortOrder.split(",");
+                        orders.add(new Order(getSortDirection(_sort[1]), _sort[0]));
+                    }
+                } else {
+                    // sort=[field, direction]
+                    orders.add(new Order(getSortDirection(sort[1]), sort[0]));
+                }
+
+                List<AccountDetail> accountDetails = new ArrayList<>();
+                Pageable pagingSort = PageRequest.of(page, size, Sort.by(orders));
+
+                Page<AccountDetail> pageAccountDetails;
+                if (fullName == null) {
+                    pageAccountDetails = accountDetailService.findAll(pagingSort);
+                } else {
+                    pageAccountDetails = accountDetailService.findAccountDetailByFullNameContaining(fullName, pagingSort);
+                }
+                accountDetails = pageAccountDetails.getContent();
+
+                Map<String, Object> response = new HashMap<>();
+                response.put("accounts", accountDetails);
+                response.put("currentPage", pageAccountDetails.getNumber());
+                response.put("totalItems", pageAccountDetails.getTotalElements());
+                response.put("totalPages", pageAccountDetails.getTotalPages());
+
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 
     //xem danh sách cửa hành
     @GetMapping("/list-store")
