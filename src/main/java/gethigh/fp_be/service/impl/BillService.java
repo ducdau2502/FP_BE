@@ -6,6 +6,7 @@ import gethigh.fp_be.service.IBillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -32,5 +33,15 @@ public class BillService implements IBillService {
     @Override
     public void remove(Long id) {
         billRepo.deleteById(id);
+    }
+
+    @Override
+    public Iterable<Bill> findAllByDateCreateBetweenAndStore_Id(LocalDate start, LocalDate end, Long id) {
+        return billRepo.findAllByDateCreateBetweenAndStore_Id(start, end, id);
+    }
+
+    @Override
+    public Iterable<Bill> findAllByStore_Id(Long id) {
+        return billRepo.findAllByStore_Id(id);
     }
 }
