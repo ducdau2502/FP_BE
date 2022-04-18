@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IBillService extends _IGeneralService<Bill> {
-
+    boolean addBill(List<Cart> carts, Long account_id);
 
     Iterable<Bill> findAllByDateCreateBetweenAndStore_Id(LocalDate start, LocalDate end, Long id);
 

@@ -59,4 +59,8 @@ public class Cart {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    public Double getTotalPrice() {
+        return (this.quantity * product.getPrice());
+    }
 }

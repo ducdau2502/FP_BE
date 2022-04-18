@@ -138,15 +138,11 @@ public class CustomerDashboard {
         return new ResponseEntity<>(flag, HttpStatus.OK);
     }
 
-//    @PostMapping("/pay/{account_id}")
-//    public ResponseEntity<?> pay(@PathVariable("account_id") Long account_id, @RequestBody Bill bill) {
-//        AccountDetail accountDetail = accountDetailService.findById(account_id).get();
-//        List<Cart> carts = (List<Cart>) cartService.findAllByAccountDetail_Id(account_id);
-//        for (Cart cart : carts) {
-//            Product product = productService.findById(cart.getProduct().getId()).get();
-//            bill.setDateCreate(LocalDate.now());
-//            bill.setCustomer(accountDetail);
-//
-//        }
-//    }
+    @PostMapping("/pay/{account_id}")
+    public ResponseEntity<?> pay(@PathVariable("account_id") Long account_id) {
+       List<Cart> carts = (List<Cart>) cartService.findAllByAccountDetail_Id(account_id);
+       boolean payCheck = billService.addBill(carts, account_id);
+       cartService.deleteAllByAccountDetail_Id(account_id);
+       return new ResponseEntity<>(payCheck, HttpStatus.OK);
+    }
 }
