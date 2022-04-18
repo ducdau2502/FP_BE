@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StoreRepo extends JpaRepository<Store,Long> {
@@ -19,4 +20,6 @@ public interface StoreRepo extends JpaRepository<Store,Long> {
     Iterable<Store> findAllByNameContaining(String name);
 
     Iterable<Store> findAllByCategoriesList_Id(Long id);
+
+    Optional<Store> findStoreByStoreOwner_Id(Long id);
 }

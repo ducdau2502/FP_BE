@@ -1,14 +1,8 @@
 package gethigh.fp_be.controller;
 
 import gethigh.fp_be.dto.response.TopStoreSale;
-import gethigh.fp_be.model.Product;
-import gethigh.fp_be.model.ProductFeedback;
-import gethigh.fp_be.model.Store;
-import gethigh.fp_be.model.StoreCategories;
-import gethigh.fp_be.service.IProductFeedbackService;
-import gethigh.fp_be.service.IProductService;
-import gethigh.fp_be.service.IStoreCategoriesService;
-import gethigh.fp_be.service.IStoreService;
+import gethigh.fp_be.model.*;
+import gethigh.fp_be.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +28,13 @@ public class HomeController {
     IStoreService iStoreService;
 
     @Autowired
+    IAccountDetailService accountDetailService;
+
+    @Autowired
     IProductService productService;
+
+    @Autowired
+    IProductImageService productImageService;
 
     @Autowired
     IProductFeedbackService productFeedbackService;
@@ -73,12 +73,22 @@ public class HomeController {
     // get all category
     @GetMapping("/list-category")
     public ResponseEntity<?> getAllCategories() {
-        Iterable<StoreCategories> category = categoriesService.findAll();
-        if (category.iterator().hasNext()) {
-            return new ResponseEntity<>(category, HttpStatus.OK);
+        Iterable<StoreCategories> categories = categoriesService.findAll();
+        if (categories.iterator().hasNext()) {
+            return new ResponseEntity<>(categories, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new MessageResponse("store not found"), HttpStatus.NOT_FOUND);
         }
+    }
+
+    //Tìm ảnh của sản phẩm
+    @GetMapping("/get-image/{id_product}")
+    public ResponseEntity<?> getImage(@PathVariable("id_product") Long id_product) {
+        Optional<ProductImage> productImage = productImageService.findByProduct_Id(id_product);
+        if (!productImage.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(productImage, HttpStatus.OK);
     }
 
     //tìm tất cả sản phẩm của cửa hàng
@@ -139,11 +149,7 @@ public class HomeController {
     @GetMapping("/feed-back/{id}")
     private ResponseEntity<?> showFeedbackByProduct(@PathVariable("id") Long id) {
         Iterable<ProductFeedback> productFeedbacks = productFeedbackService.findAllByProductFeedback_Id(id);
-        if (productFeedbacks.iterator().hasNext()) {
-            return new ResponseEntity<>(productFeedbacks, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new MessageResponse("no feedback"), HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(productFeedbacks, HttpStatus.OK);
     }
 
     //show all store
@@ -191,5 +197,23 @@ public class HomeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(stores, HttpStatus.OK);
+    }
+
+    @GetMapping("/detail-account/{id}")
+    public ResponseEntity<AccountDetail> findAccountById(@PathVariable("id") Long id) {
+        Optional<AccountDetail> accountDetail = accountDetailService.findById(id);
+        if (accountDetail.isPresent()) {
+            return new ResponseEntity<>(accountDetail.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/detail-store/{id}")
+    public ResponseEntity<Store> findStoreById(@PathVariable("id") Long id) {
+        Optional<Store> store = storeService.findStoreByStoreOwner_Id(id);
+        if (store.isPresent()) {
+            return new ResponseEntity<>(store.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

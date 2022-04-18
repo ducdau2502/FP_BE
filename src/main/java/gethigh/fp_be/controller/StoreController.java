@@ -1,6 +1,7 @@
 package gethigh.fp_be.controller;
 
 import gethigh.fp_be.model.Product;
+import gethigh.fp_be.model.StoreCategories;
 import gethigh.fp_be.repository.ProductRepo;
 import gethigh.fp_be.repository.StoreRepo;
 import gethigh.fp_be.service.IProductService;
@@ -35,7 +36,7 @@ public class StoreController {
     @Autowired
     ProductRepo productRepo;
     @GetMapping("/show")
-    private String showPage(){
+    public String showPage(){
         return "  store page";
     }
 
@@ -43,7 +44,7 @@ public class StoreController {
 
     // show all product with store
     @GetMapping("{id}/showProduct")
-    private ResponseEntity<?> showAllProductInStore(@PathVariable("id") Long id){
+    public ResponseEntity<?> showAllProductInStore(@PathVariable("id") Long id){
         Iterable<Product> products = productService.findAllByStore_Id(id);
         if (!products.iterator().hasNext()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -52,12 +53,22 @@ public class StoreController {
     }
 
     //search product in store
-    @GetMapping("{id}/search/{name}")
-    private ResponseEntity<?> searchProduct(@PathVariable("id") Long id, @Param("name") String name){
+    @GetMapping("/search/{id_store}/{name}")
+    public ResponseEntity<?> searchProduct(@PathVariable("id_store") Long id, @RequestParam("name") String name){
      Iterable<Product> products = productRepo.findAllByNameWithStore(id, name);
      if (!products.iterator().hasNext()){
          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
      }
      return new ResponseEntity<>(products,HttpStatus.OK);
+    }
+
+    //Show all categories
+    @GetMapping("/categories")
+    public ResponseEntity<?> showAllCategories() {
+        Iterable<StoreCategories> categories = iStoreCategoriesService.findAll();
+        if (!categories.iterator().hasNext()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 }

@@ -16,6 +16,8 @@ public class Product {
     private Integer soldQuantity;
     private String description;
 
+    private String coverImage;
+
     @ManyToOne
     private Store store;
 
@@ -46,6 +48,17 @@ public class Product {
         this.price = price;
         this.inventoryQuantity = inventoryQuantity;
         this.description = description;
+    }
+
+    public Product(Long id, String name, Double price, Integer inventoryQuantity, Integer soldQuantity, String description, String coverImage, Store store) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.inventoryQuantity = inventoryQuantity;
+        this.soldQuantity = soldQuantity;
+        this.description = description;
+        this.coverImage = coverImage;
+        this.store = store;
     }
 
     public Long getId() {
@@ -102,5 +115,13 @@ public class Product {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
     }
 }

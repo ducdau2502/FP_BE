@@ -1,10 +1,8 @@
 package gethigh.fp_be.controller.auth;
 
-import gethigh.fp_be.dto.request.ImageForm;
-import gethigh.fp_be.model.Product;
-import gethigh.fp_be.model.ProductImage;
-import gethigh.fp_be.model.Store;
-import gethigh.fp_be.model.StoreCategories;
+import gethigh.fp_be.dto.response.RevenueTime;
+import gethigh.fp_be.model.*;
+import gethigh.fp_be.service.IBillService;
 import gethigh.fp_be.service.IProductImageService;
 import gethigh.fp_be.service.IProductService;
 import gethigh.fp_be.service.IStoreService;
@@ -14,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -32,10 +33,13 @@ public class SellerDashboard {
     IProductService productService;
 
     @Autowired
-    private IStoreService iStoreService;
+    private IStoreService storeService;
 
     @Autowired
-    private IProductImageService iProductImageService;
+    private IBillService billService;
+
+    @Autowired
+    private IProductImageService productImageService;
 
     @Autowired
     StoreCategoriesService storeCategoriesService;
@@ -73,7 +77,7 @@ public class SellerDashboard {
     //tìm tất cả ảnh của một sản phẩm
     @GetMapping("/search-product-image/{id}")
     public ResponseEntity<Iterable<ProductImage>> findProductImagesByProductId(@PathVariable("id") Long id) {
-        Iterable<ProductImage> productImages = iProductImageService.findAllByProductId(id);
+        Iterable<ProductImage> productImages = productImageService.findAllByProductId(id);
         if (productImages.iterator().hasNext()) {
             return new ResponseEntity<>(productImages, HttpStatus.OK);
         }
@@ -98,7 +102,7 @@ public class SellerDashboard {
     //thêm ảnh cho sản phẩm
     @PostMapping("/create-image")
     public ResponseEntity<ProductImage> saveProductImage(@RequestBody ProductImage productImage) {
-        ProductImage productImageCreate = iProductImageService.save(productImage);
+        ProductImage productImageCreate = productImageService.save(productImage);
         return new ResponseEntity<>(productImageCreate, HttpStatus.OK);
     }
 
@@ -106,12 +110,12 @@ public class SellerDashboard {
     @PutMapping("/{id}/update-image")
     public ResponseEntity<ProductImage> updateProductImage(@PathVariable("id") Long id,
                                                            @RequestBody ProductImage productImageUpdate) {
-        Optional<ProductImage> productImage = iProductImageService.findById(id);
+        Optional<ProductImage> productImage = productImageService.findById(id);
         if (!productImage.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         productImageUpdate.setId(productImage.get().getId());
-        productImageUpdate = iProductImageService.save(productImageUpdate);
+        productImageUpdate = productImageService.save(productImageUpdate);
         return new ResponseEntity<>(productImageUpdate, HttpStatus.OK);
     }
 
@@ -124,18 +128,18 @@ public class SellerDashboard {
 //            iProductImageService.save(new ProductImage(imageForm.getImageList().get(i), imageForm.getProduct()));
 //        }
 
-        return new ResponseEntity<>(iProductImageService.save(image), HttpStatus.CREATED);
+        return new ResponseEntity<>(productImageService.save(image), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete-image/{id}")
     public void deleteImage(@PathVariable("id") Long id) {
-        iProductImageService.remove(id);
+        productImageService.remove(id);
     }
 
     //Tìm ảnh của sản phẩm
     @GetMapping("/get-image/{id_product}")
     public ResponseEntity<?> getImage(@PathVariable("id_product") Long id_product) {
-        Optional<ProductImage> productImage = iProductImageService.findByProduct_Id(id_product);
+        Optional<ProductImage> productImage = productImageService.findByProduct_Id(id_product);
         if (!productImage.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -147,7 +151,7 @@ public class SellerDashboard {
     public ResponseEntity<?> createProduct(@PathVariable("id_store") Long id_store,
                                            @RequestBody Product product) {
         product.setSoldQuantity(0);
-        Store store = iStoreService.findById(id_store).get();
+        Store store = storeService.findById(id_store).get();
         product.setStore(store);
         Product productCreate = productService.save(product);
         return new ResponseEntity<>(productCreate, HttpStatus.CREATED);
@@ -169,5 +173,47 @@ public class SellerDashboard {
     public ResponseEntity<Product> getProduct(@PathVariable("id_product") Long id) {
         Optional<Product> productOptional = productService.findById(id);
         return productOptional.map(product -> new ResponseEntity<>(product, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    //Gán category cho store
+    @GetMapping("/store/{id_store}/{id_category}")
+    public ResponseEntity<Store> saveCategory(@PathVariable("id_store") Long id_store, @PathVariable("id_category") Long id_category) {
+        Optional<Store> store = storeService.findById(id_store);
+        Optional<StoreCategories> category = storeCategoriesService.findById(id_category);
+        if (!store.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        store.get().setCategoriesList(category.get());
+        return new ResponseEntity<>(storeService.save(store.get()), HttpStatus.OK);
+    }
+
+    //tạo category cho store
+    @PostMapping("/create-category")
+    public ResponseEntity<StoreCategories> create(@RequestBody StoreCategories category) {
+        return new ResponseEntity<>(storeCategoriesService.save(category), HttpStatus.OK);
+    }
+
+    // doanh thu theo thời gian
+    @GetMapping("/revenue/{id_store}")
+    public ResponseEntity<Map<String, Object>> revenue(@PathVariable("id_store") Long id_store, @RequestBody RevenueTime revenue) {
+        Iterable<Bill> bills = billService.findAllByDateCreateBetweenAndStore_Id(revenue.getStart(), revenue.getEnd(), id_store);
+        double totalRevenue = 0;
+        for(Bill bill : bills) {
+            totalRevenue += bill.getTotalPrice();
+        }
+        Map<String, Object> response = new HashMap<>();
+        response.put("bills", bills);
+        response.put("totalRevenue", totalRevenue);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/total-revenue/{id_store}")
+    public ResponseEntity<?> totalRevenue(@PathVariable("id_store") Long id_store) {
+        Iterable<Bill> bills = billService.findAllByStore_Id(id_store);
+        double totalRevenue = 0;
+        for(Bill bill : bills) {
+            totalRevenue += bill.getTotalPrice();
+        }
+        return new ResponseEntity<>(totalRevenue, HttpStatus.OK);
     }
 }
