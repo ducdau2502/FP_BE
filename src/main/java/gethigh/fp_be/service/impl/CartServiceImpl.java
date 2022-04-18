@@ -68,4 +68,20 @@ public class CartServiceImpl implements ICartService {
         }
         cartRepo.save(cart);
     }
+
+    @Override
+    public void minusQuantity(Long product_id, AccountDetail accountDetail) {
+        Product product = productRepo.findById(product_id).get();
+        Cart cart = cartRepo.findByAccountDetailAndProduct(accountDetail, product);
+        cart.setQuantity(cart.getQuantity() - 1);
+        cartRepo.save(cart);
+    }
+
+    @Override
+    public void plusQuantity(Long product_id, AccountDetail accountDetail) {
+        Product product = productRepo.findById(product_id).get();
+        Cart cart = cartRepo.findByAccountDetailAndProduct(accountDetail, product);
+        cart.setQuantity(cart.getQuantity() + 1);
+        cartRepo.save(cart);
+    }
 }

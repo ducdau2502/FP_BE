@@ -1,9 +1,11 @@
 package gethigh.fp_be.controller.auth;
 
 import gethigh.fp_be.model.AccountDetail;
+import gethigh.fp_be.model.Bill;
 import gethigh.fp_be.model.Cart;
 import gethigh.fp_be.model.Product;
 import gethigh.fp_be.service.IAccountDetailService;
+import gethigh.fp_be.service.IBillService;
 import gethigh.fp_be.service.ICartService;
 import gethigh.fp_be.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +13,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("customer/dashboard")
 public class CustomerDashboard {
-//khu vực quản lý các tác vụ quản lý của khách hàng -huydu
+    //khu vực quản lý các tác vụ quản lý của khách hàng -huydu
     @Autowired
     private ICartService cartService;
 
@@ -27,9 +31,12 @@ public class CustomerDashboard {
     @Autowired
     private IProductService productService;
 
+    @Autowired
+    private IBillService billService;
+
     // test phân quyền
     @GetMapping("/show")
-    private String showDashboard(){
+    private String showDashboard() {
         return " Customer Dashboard";
     }
 
@@ -38,6 +45,22 @@ public class CustomerDashboard {
                                      @PathVariable("product_id") Long product_id) {
         AccountDetail accountDetail = accountDetailService.findById(account_id).get();
         cartService.addCart(product_id, accountDetail);
+        return new ResponseEntity<>(accountDetail, HttpStatus.OK);
+    }
+
+    @PostMapping("/plus/{account_id}/{product_id}")
+    public ResponseEntity<?> plusQuantity(@PathVariable("account_id") Long account_id,
+                                          @PathVariable("product_id") Long product_id) {
+        AccountDetail accountDetail = accountDetailService.findById(account_id).get();
+        cartService.plusQuantity(product_id, accountDetail);
+        return new ResponseEntity<>(accountDetail, HttpStatus.OK);
+    }
+
+    @PostMapping("/minus/{account_id}/{product_id}")
+    public ResponseEntity<?> minusQuantity(@PathVariable("account_id") Long account_id,
+                                           @PathVariable("product_id") Long product_id) {
+        AccountDetail accountDetail = accountDetailService.findById(account_id).get();
+        cartService.minusQuantity(product_id, accountDetail);
         return new ResponseEntity<>(accountDetail, HttpStatus.OK);
     }
 
@@ -59,4 +82,16 @@ public class CustomerDashboard {
         cartService.deleteAllByAccountDetail_Id(account_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+//    @PostMapping("/pay/{account_id}")
+//    public ResponseEntity<?> pay(@PathVariable("account_id") Long account_id, @RequestBody Bill bill) {
+//        AccountDetail accountDetail = accountDetailService.findById(account_id).get();
+//        List<Cart> carts = (List<Cart>) cartService.findAllByAccountDetail_Id(account_id);
+//        for (Cart cart : carts) {
+//            Product product = productService.findById(cart.getProduct().getId()).get();
+//            bill.setDateCreate(LocalDate.now());
+//            bill.setCustomer(accountDetail);
+//
+//        }
+//    }
 }

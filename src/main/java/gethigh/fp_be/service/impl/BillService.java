@@ -1,12 +1,16 @@
 package gethigh.fp_be.service.impl;
 
 import gethigh.fp_be.model.Bill;
+import gethigh.fp_be.model.Cart;
+import gethigh.fp_be.model.Product;
 import gethigh.fp_be.repository.BillRepo;
+import gethigh.fp_be.repository.ProductRepo;
 import gethigh.fp_be.service.IBillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +33,8 @@ public class BillService implements IBillService {
     public Bill save(Bill bill) {
         return billRepo.save(bill);
     }
+
+
 
     @Override
     public void remove(Long id) {

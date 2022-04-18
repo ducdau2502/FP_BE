@@ -14,4 +14,8 @@ public interface ICartService extends _IGeneralService<Cart> {
     void deleteAllByAccountDetail_Id(Long id);
 
     void addCart(Long product_id, AccountDetail accountDetail);
+
+    void minusQuantity(Long product_id, AccountDetail accountDetail);
+
+    void plusQuantity(Long product_id, AccountDetail accountDetail);
 }
