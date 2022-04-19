@@ -2,10 +2,7 @@ package gethigh.fp_be.controller.auth;
 
 import gethigh.fp_be.dto.response.RevenueTime;
 import gethigh.fp_be.model.*;
-import gethigh.fp_be.service.IBillService;
-import gethigh.fp_be.service.IProductImageService;
-import gethigh.fp_be.service.IProductService;
-import gethigh.fp_be.service.IStoreService;
+import gethigh.fp_be.service.*;
 import gethigh.fp_be.service.impl.StoreCategoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +31,9 @@ public class SellerDashboard {
 
     @Autowired
     private IStoreService storeService;
+
+    @Autowired
+    private IVoucherService voucherService;
 
     @Autowired
     private IBillService billService;
@@ -194,7 +194,7 @@ public class SellerDashboard {
     }
 
     // doanh thu theo thời gian
-    @GetMapping("/revenue/{id_store}")
+    @PostMapping("/revenue/{id_store}")
     public ResponseEntity<Map<String, Object>> revenue(@PathVariable("id_store") Long id_store, @RequestBody RevenueTime revenue) {
         Iterable<Bill> bills = billService.findAllByDateCreateBetweenAndStore_Id(revenue.getStart(), revenue.getEnd(), id_store);
         double totalRevenue = 0;
@@ -208,12 +208,37 @@ public class SellerDashboard {
     }
 
     @GetMapping("/total-revenue/{id_store}")
-    public ResponseEntity<?> totalRevenue(@PathVariable("id_store") Long id_store) {
+    public ResponseEntity<Map<String, Object>> totalRevenue(@PathVariable("id_store") Long id_store) {
         Iterable<Bill> bills = billService.findAllByStore_Id(id_store);
         double totalRevenue = 0;
         for(Bill bill : bills) {
             totalRevenue += bill.getTotalPrice();
         }
-        return new ResponseEntity<>(totalRevenue, HttpStatus.OK);
+        Map<String, Object> response = new HashMap<>();
+        response.put("bills", bills);
+        response.put("totalRevenue", totalRevenue);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/find-voucher/{id_store}")
+    public ResponseEntity<?> findAllByStore_Id(@PathVariable("id_store") Long id_store) {
+        Iterable<Voucher> vouchers = voucherService.findAllByStore_Id(id_store);
+        return new ResponseEntity<>(vouchers, HttpStatus.OK);
+    }
+
+    @PostMapping("/create-voucher")
+    public ResponseEntity<?> createVoucher(@RequestBody Voucher voucher) {
+        return new ResponseEntity<>(voucherService.save(voucher), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete-voucher/{id}")
+    public ResponseEntity<?> createVoucher(@PathVariable("id") Long id) {
+        Optional<Voucher> voucherOptional = voucherService.findById(id);
+        if (!voucherOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            voucherService.remove(id);
+            return new ResponseEntity<>(voucherOptional.get(), HttpStatus.OK);
+        }
     }
 }

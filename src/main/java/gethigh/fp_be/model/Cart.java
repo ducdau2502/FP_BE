@@ -21,26 +21,26 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(long id, long quantity, AccountDetail accountDetail, Product product) {
+    public Cart(Long id, Long quantity, AccountDetail accountDetail, Product product) {
         this.id = id;
         this.quantity = quantity;
         this.accountDetail = accountDetail;
         this.product = product;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(long quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 
@@ -58,5 +58,9 @@ public class Cart {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Double getTotalPrice() {
+        return (this.quantity * product.getPrice());
     }
 }
