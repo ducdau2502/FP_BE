@@ -18,10 +18,10 @@ public class AccountDetail {
     @Enumerated(EnumType.STRING)
     private EGender gender;
     private String address;
-    private Integer identityCard;
+    private String identityCard;
     private String avatar;
     private LocalDate dateCreate;
-    private Integer bankAccount;
+    private String bankAccount;
     private String status;
 
     @OneToOne
@@ -31,17 +31,33 @@ public class AccountDetail {
     public AccountDetail() {
     }
 
-    public AccountDetail(
-                         String fullName,
+    public AccountDetail(String fullName,
                          Integer age,
-                         EGender gender,
                          String address,
-                         Integer identityCard,
-                         String avatar,
-                         LocalDate dateCreate,
-                         Integer bankAccount,
+                         String identityCard,
+                         String bankAccount,
                          String status,
                          Account account) {
+        this.fullName = fullName;
+        this.age = age;
+        this.address = address;
+        this.identityCard = identityCard;
+        this.bankAccount = bankAccount;
+        this.status = status;
+        this.account = account;
+    }
+
+    public AccountDetail(
+            String fullName,
+            Integer age,
+            EGender gender,
+            String address,
+            String identityCard,
+            String avatar,
+            LocalDate dateCreate,
+            String bankAccount,
+            String status,
+            Account account) {
         this.fullName = fullName;
         this.age = age;
         this.gender = gender;
@@ -94,11 +110,11 @@ public class AccountDetail {
         this.address = address;
     }
 
-    public Integer getIdentityCard() {
+    public String getIdentityCard() {
         return identityCard;
     }
 
-    public void setIdentityCard(Integer identityCard) {
+    public void setIdentityCard(String identityCard) {
         this.identityCard = identityCard;
     }
 
@@ -118,11 +134,11 @@ public class AccountDetail {
         this.dateCreate = dateCreate;
     }
 
-    public Integer getBankAccount() {
+    public String getBankAccount() {
         return bankAccount;
     }
 
-    public void setBankAccount(Integer bankAccount) {
+    public void setBankAccount(String bankAccount) {
         this.bankAccount = bankAccount;
     }
 
