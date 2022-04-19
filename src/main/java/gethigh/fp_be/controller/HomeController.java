@@ -37,6 +37,9 @@ public class HomeController {
     IProductImageService productImageService;
 
     @Autowired
+    IStoreRatingService ratingService;
+
+    @Autowired
     IProductFeedbackService productFeedbackService;
 
     @Autowired
@@ -215,5 +218,12 @@ public class HomeController {
             return new ResponseEntity<>(store.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    //rating
+    @GetMapping("/find-rating/{store_id}")
+    public ResponseEntity<Iterable<StoreRating>> findByStore_Id(@PathVariable("store_id") Long store_id) {
+        Iterable<StoreRating> storeRatings = ratingService.findAllByStore_Id(store_id);
+        return new ResponseEntity<>(storeRatings, HttpStatus.OK);
     }
 }

@@ -36,6 +36,9 @@ public class CustomerDashboard {
     private IProductService productService;
 
     @Autowired
+    private IStoreRatingService ratingService;
+
+    @Autowired
     private IStoreLikeService iStoreLikeService;
 
     @Autowired
@@ -129,7 +132,7 @@ public class CustomerDashboard {
 
     @GetMapping("/check/{store_id}/{account_id}")
     public ResponseEntity<Boolean> checkLikeStore(@PathVariable("store_id") Long store_id,
-                                             @PathVariable("account_id") Long account_id) {
+                                                  @PathVariable("account_id") Long account_id) {
         boolean flag = false;
         Optional<StoreLike> storeLikeOptional = iStoreLikeService.findByStore_IdAndAccountLike_Id(store_id, account_id);
         if (storeLikeOptional.isPresent()) {
@@ -140,9 +143,20 @@ public class CustomerDashboard {
 
     @PostMapping("/pay/{account_id}")
     public ResponseEntity<?> pay(@PathVariable("account_id") Long account_id) {
-       List<Cart> carts = (List<Cart>) cartService.findAllByAccountDetail_Id(account_id);
-       boolean payCheck = billService.addBill(carts, account_id);
-       cartService.deleteAllByAccountDetail_Id(account_id);
-       return new ResponseEntity<>(payCheck, HttpStatus.OK);
+        List<Cart> carts = (List<Cart>) cartService.findAllByAccountDetail_Id(account_id);
+        boolean payCheck = billService.addBill(carts, account_id);
+        cartService.deleteAllByAccountDetail_Id(account_id);
+        return new ResponseEntity<>(payCheck, HttpStatus.OK);
+    }
+
+    // create rating
+    @PostMapping("/create-rating")
+    public ResponseEntity<StoreRating> createRating(@RequestBody StoreRating storeRating) {
+        Optional<StoreRating> storeRatingOptional = ratingService.findByAccount_IdAndStore_Id(storeRating.getAccount().getId(), storeRating.getStore().getId());
+        if (storeRatingOptional.isPresent()) {
+            ratingService.remove(storeRatingOptional.get().getId());
+            ratingService.save(storeRating);
+        }
+        return new ResponseEntity<>(ratingService.save(storeRating), HttpStatus.OK);
     }
 }
