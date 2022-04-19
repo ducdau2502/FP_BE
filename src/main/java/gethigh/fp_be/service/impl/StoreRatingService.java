@@ -33,4 +33,14 @@ public class StoreRatingService implements IStoreRatingService {
     public void remove(Long id) {
         storeRatingRepo.deleteById(id);
     }
+
+    @Override
+    public Optional<StoreRating> findByAccount_IdAndStore_Id(Long account_id, Long store_id) {
+        return storeRatingRepo.findByAccount_IdAndStore_Id(account_id, store_id);
+    }
+
+    @Override
+    public Iterable<StoreRating> findAllByStore_Id(Long id) {
+        return storeRatingRepo.findAllByStore_Id(id);
+    }
 }

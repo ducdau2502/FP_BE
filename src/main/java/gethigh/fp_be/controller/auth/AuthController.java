@@ -121,13 +121,10 @@ public class AuthController {
         AccountDetail accountDetail = new AccountDetail(
                 signUpRequest.getFullName(),
                 signUpRequest.getAge(),
-                signUpRequest.getGender(),
                 signUpRequest.getAddress(),
                 signUpRequest.getIdentityCard(),
-                signUpRequest.getAvatar(),
-                signUpRequest.getDateCreate(),
                 signUpRequest.getBankAccount(),
-                signUpRequest.getStatus(),
+                signUpRequest.getStatusName(),
                 acc
         );
         accountDetailService.save(accountDetail);
