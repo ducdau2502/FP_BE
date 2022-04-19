@@ -83,4 +83,9 @@ public class BillService implements IBillService {
     public Iterable<Bill> findAllByStore_Id(Long id) {
         return billRepo.findAllByStore_Id(id);
     }
+
+    @Override
+    public Iterable<Bill> findAllByCustomer_Id(Long id) {
+        return billRepo.findAllByCustomer_Id(id);
+    }
 }

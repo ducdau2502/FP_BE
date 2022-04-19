@@ -18,4 +18,6 @@ public interface ICartService extends _IGeneralService<Cart> {
     void minusQuantity(Long product_id, AccountDetail accountDetail);
 
     void plusQuantity(Long product_id, AccountDetail accountDetail);
+
+    Double getTotal(Long account_id);
 }

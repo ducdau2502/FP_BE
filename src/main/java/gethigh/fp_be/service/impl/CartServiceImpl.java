@@ -9,6 +9,7 @@ import gethigh.fp_be.service.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -83,5 +84,15 @@ public class CartServiceImpl implements ICartService {
         Cart cart = cartRepo.findByAccountDetailAndProduct(accountDetail, product);
         cart.setQuantity(cart.getQuantity() + 1);
         cartRepo.save(cart);
+    }
+
+    @Override
+    public Double getTotal(Long account_id) {
+        Double sum = Double.valueOf(0);
+        List<Cart> cartList = (List<Cart>) cartRepo.findAllByAccountDetail_Id(account_id);
+        for (Cart cart : cartList) {
+            sum += cart.getTotalPrice();
+        }
+        return sum;
     }
 }

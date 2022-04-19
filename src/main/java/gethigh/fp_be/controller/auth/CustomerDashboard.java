@@ -44,6 +44,9 @@ public class CustomerDashboard {
     @Autowired
     private IBillService billService;
 
+    @Autowired
+    private IVoucherService voucherService;
+
     // test phân quyền
     @GetMapping("/show")
     private String showDashboard() {
@@ -78,6 +81,12 @@ public class CustomerDashboard {
     public ResponseEntity<?> showCart(@PathVariable("account_id") Long id) {
         Iterable<Cart> carts = cartService.findAllByAccountDetail_Id(id);
         return new ResponseEntity<>(carts, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-total/{account_id}")
+    public ResponseEntity<?> getTotal(@PathVariable("account_id") Long id) {
+        Double sum = cartService.getTotal(id);
+        return new ResponseEntity<>(sum, HttpStatus.OK);
     }
 
     @DeleteMapping("/cart/{account_id}/{product_id}")
@@ -144,5 +153,23 @@ public class CustomerDashboard {
        boolean payCheck = billService.addBill(carts, account_id);
        cartService.deleteAllByAccountDetail_Id(account_id);
        return new ResponseEntity<>(payCheck, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-discount/{store_id}")
+    public ResponseEntity<?> getDiscount(@PathVariable("store_id") Long store_id) {
+        Optional<Voucher> voucherOptional = voucherService.findById(store_id);
+        if (!voucherOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(voucherOptional.get(), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-bill/{customer_id}")
+    public ResponseEntity<?> getAllBill(@PathVariable("customer_id") Long customer_id) {
+        Iterable<Bill> bills = billService.findAllByCustomer_Id(customer_id);
+        if (!bills.iterator().hasNext()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(bills, HttpStatus.OK);
     }
 }
