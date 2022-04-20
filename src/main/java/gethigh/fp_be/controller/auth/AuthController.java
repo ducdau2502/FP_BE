@@ -1,5 +1,6 @@
 package gethigh.fp_be.controller.auth;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -119,10 +120,13 @@ public class AuthController {
         account.setRoles(roles);
         Account acc = accountRepo.save(account);
         AccountDetail accountDetail = new AccountDetail(
-                signUpRequest.getFullName(),
+            signUpRequest.getFullName(),
                 signUpRequest.getAge(),
+                signUpRequest.getGender(),
                 signUpRequest.getAddress(),
                 signUpRequest.getIdentityCard(),
+                signUpRequest.getAvatar(),
+                LocalDate.now(),
                 signUpRequest.getBankAccount(),
                 signUpRequest.getStatusName(),
                 acc

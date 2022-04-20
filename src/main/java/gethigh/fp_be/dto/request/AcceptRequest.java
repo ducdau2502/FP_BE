@@ -7,25 +7,16 @@ import java.util.List;
 import java.util.Set;
 
 public class AcceptRequest {
-
+    private Long idAcc;
     private Set<String> role;
-    private String nameStore;
-    String description;
 
-    public String getNameStore() {
-        return nameStore;
+
+    public Long getIdAcc() {
+        return idAcc;
     }
 
-    public void setNameStore(String nameStore) {
-        this.nameStore = nameStore;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setIdAcc(Long idAcc) {
+        this.idAcc = idAcc;
     }
 
     public Set<String> getRole() {

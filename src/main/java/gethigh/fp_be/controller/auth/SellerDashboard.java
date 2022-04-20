@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -44,6 +43,16 @@ public class SellerDashboard {
     @Autowired
     StoreCategoriesService storeCategoriesService;
 
+
+    @PostMapping("/updateStore/{id}")
+    public ResponseEntity<?> saveInformationStore(@PathVariable("id") Long id,@RequestBody Store store){
+        Store newStore = storeService.findById(id).get();
+        newStore.setName(store.getName());
+        newStore.setDescription(store.getDescription());
+        newStore.setAvatar(store.getAvatar());
+        storeService.save(newStore);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     //hiển thị tất cả product của 1 cửa hàng
     @GetMapping("/{id}")
     public ResponseEntity<?> findAllProducts(@PathVariable("id") Long id) {
@@ -236,7 +245,7 @@ public class SellerDashboard {
         Optional<Voucher> voucherOptional = voucherService.findById(id);
         if (!voucherOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
+        }else {
             voucherService.remove(id);
             return new ResponseEntity<>(voucherOptional.get(), HttpStatus.OK);
         }

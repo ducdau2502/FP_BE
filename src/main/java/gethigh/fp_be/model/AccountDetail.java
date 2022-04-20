@@ -1,8 +1,6 @@
 package gethigh.fp_be.model;
 
 
-import gethigh.fp_be.model.num.EGender;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -15,8 +13,8 @@ public class AccountDetail {
     private Long id;
     private String fullName;
     private Integer age;
-    @Enumerated(EnumType.STRING)
-    private EGender gender;
+
+    private String gender;
     private String address;
     private String identityCard;
     private String avatar;
@@ -28,36 +26,24 @@ public class AccountDetail {
     private Account account;
 
 
-    public AccountDetail() {
+    public AccountDetail(String fullName, String gender, Integer age, String address, String identityCard, String avatar, LocalDate now, String bankAccount, String statusName, String signUpRequestAvatar, Account acc) {
+    }
+
+    public AccountDetail(Long id, String status) {
+        this.id = id;
+        this.status = status;
     }
 
     public AccountDetail(String fullName,
                          Integer age,
+                         String gender,
                          String address,
                          String identityCard,
+                         String avatar,
+                         LocalDate dateCreate,
                          String bankAccount,
                          String status,
                          Account account) {
-        this.fullName = fullName;
-        this.age = age;
-        this.address = address;
-        this.identityCard = identityCard;
-        this.bankAccount = bankAccount;
-        this.status = status;
-        this.account = account;
-    }
-
-    public AccountDetail(
-            String fullName,
-            Integer age,
-            EGender gender,
-            String address,
-            String identityCard,
-            String avatar,
-            LocalDate dateCreate,
-            String bankAccount,
-            String status,
-            Account account) {
         this.fullName = fullName;
         this.age = age;
         this.gender = gender;
@@ -68,6 +54,10 @@ public class AccountDetail {
         this.bankAccount = bankAccount;
         this.status = status;
         this.account = account;
+    }
+
+    public AccountDetail() {
+
     }
 
     public Long getId() {
@@ -94,13 +84,13 @@ public class AccountDetail {
         this.age = age;
     }
 
-    public EGender getGender() {
-        return gender;
-    }
-
-    public void setGender(EGender gender) {
-        this.gender = gender;
-    }
+//    public String getGender() {
+//        return gender;
+//    }
+//
+//    public void setGender(String gender) {
+//        this.gender = gender;
+//    }
 
     public String getAddress() {
         return address;
