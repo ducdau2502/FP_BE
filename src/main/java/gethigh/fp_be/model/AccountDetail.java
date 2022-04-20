@@ -13,7 +13,6 @@ public class AccountDetail {
     private Long id;
     private String fullName;
     private Integer age;
-
     private String gender;
     private String address;
     private String identityCard;
@@ -25,9 +24,6 @@ public class AccountDetail {
     @OneToOne
     private Account account;
 
-
-    public AccountDetail(String fullName, String gender, Integer age, String address, String identityCard, String avatar, LocalDate now, String bankAccount, String statusName, String signUpRequestAvatar, Account acc) {
-    }
 
     public AccountDetail(Long id, String status) {
         this.id = id;
@@ -146,5 +142,13 @@ public class AccountDetail {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }
