@@ -37,6 +37,9 @@ public class AdminDashboard {
     @Autowired
     IStoreService iStoreService;
 
+    @Autowired
+    IStoreService service;
+
     private Sort.Direction getSortDirection(String direction) {
         if (direction.equals("asc")) {
             return Sort.Direction.ASC;
@@ -54,12 +57,11 @@ public class AdminDashboard {
     }
 
     // xác nhận đăng kí với tài khoản gian hàng
-    @PostMapping("/accept/account/{id}")
-    private ResponseEntity<?> acceptSaler(@PathVariable("id") Long id, @RequestBody AcceptRequest acceptRequest) {
-        Optional<Account> account = accountRepo.findById(id);
+    @PostMapping("/accept/account")
+    private ResponseEntity<?> acceptSaler (@RequestBody AcceptRequest acceptRequest) {
+        Optional<Account> account = accountRepo.findById(acceptRequest.getIdAcc());
         Set<String> strRoles = acceptRequest.getRole();
         Set<AccountRole> roles = new HashSet<>();
-        Store store = new Store();
 
         if (!account.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -78,8 +80,6 @@ public class AdminDashboard {
                     break;
             }
         });
-        Set<AccountRole> accountRoles = account.get().getRoles();
-        roles.addAll(accountRoles);
 
         account.get().setRoles(roles);
         Account accountNew = new Account(account.get().getId(),
@@ -87,11 +87,13 @@ public class AdminDashboard {
                 account.get().getPassword(),
                 account.get().getEmail(),
                 account.get().getRoles());
-        store.setName(acceptRequest.getNameStore());
-        store.setDescription(acceptRequest.getDescription());
-
-        iStoreService.save(store);
         accountRepo.save(accountNew);
+        Optional<AccountDetail> accountDetail = accountDetailService.findByAccount_Id(account.get().getId());
+        AccountDetail accountDetailnew = new AccountDetail(account.get().getId(),"Activated");
+        accountDetailService.save(accountDetailnew);
+        Store store = new Store();
+        store.setStoreOwner(accountDetailnew);
+        iStoreService.save(store);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

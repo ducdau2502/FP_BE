@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -44,6 +43,16 @@ public class SellerDashboard {
     @Autowired
     StoreCategoriesService storeCategoriesService;
 
+
+    @PostMapping("/updateStore/{id}")
+    public ResponseEntity<?> saveInformationStore(@PathVariable("id") Long id,@RequestBody Store store){
+        Store newStore = storeService.findById(id).get();
+        newStore.setName(store.getName());
+        newStore.setDescription(store.getDescription());
+        newStore.setAvatar(store.getAvatar());
+        storeService.save(newStore);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     //hiển thị tất cả product của 1 cửa hàng
     @GetMapping("/{id}")
     public ResponseEntity<?> findAllProducts(@PathVariable("id") Long id) {
@@ -64,10 +73,11 @@ public class SellerDashboard {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //tìm sản phẩm theo tên
-    @GetMapping("/find/{name}")
-    public ResponseEntity<Iterable<Product>> findByName(@RequestParam("name") String name) {
-        Iterable<Product> products = productService.findByName(name);
+    //tìm sản phẩm theo tên và cửa hàng
+    @GetMapping("/find-by-name/{id_store}")
+    public ResponseEntity<Iterable<Product>> findByNameAndStore(@PathVariable("id_store") Long id_store,
+                                                                @RequestParam("search_product") String search) {
+        Iterable<Product> products = productService.findAllByStore_IdAndNameContaining(id_store, search);
         if (products.iterator().hasNext()) {
             return new ResponseEntity<>(products, HttpStatus.OK);
         }
@@ -236,7 +246,7 @@ public class SellerDashboard {
         Optional<Voucher> voucherOptional = voucherService.findById(id);
         if (!voucherOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
+        }else {
             voucherService.remove(id);
             return new ResponseEntity<>(voucherOptional.get(), HttpStatus.OK);
         }

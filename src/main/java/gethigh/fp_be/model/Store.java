@@ -22,6 +22,12 @@ public class Store {
     public Store() {
     }
 
+    public Store(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
     public Store(Long id, String name, String description, String avatar, AccountDetail storeOwner, StoreCategories categoriesList) {
         this.id = id;
         this.name = name;
