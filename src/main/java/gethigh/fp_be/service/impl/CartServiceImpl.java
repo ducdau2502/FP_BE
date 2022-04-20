@@ -95,4 +95,17 @@ public class CartServiceImpl implements ICartService {
         }
         return sum;
     }
+
+    @Override
+    public boolean checkQuantity(Long account_id) {
+        boolean check = true;
+        List<Cart> cartList = (List<Cart>) cartRepo.findAllByAccountDetail_Id(account_id);
+        for (Cart cart : cartList) {
+            if (cart.getQuantity() > cart.getProduct().getInventoryQuantity()) {
+                check = false;
+                break;
+            }
+        }
+        return check;
+    }
 }

@@ -64,10 +64,13 @@ public class BillService implements IBillService {
                 bill.setStore(cart.getProduct().getStore());
                 bill.setProduct(product);
                 voucher.ifPresent(bill::setVoucher);
-                billRepo.save(bill);
-                product.setInventoryQuantity((int) (product.getInventoryQuantity() - cart.getQuantity()));
-                product.setSoldQuantity((int) (product.getSoldQuantity() + cart.getQuantity()));
-                productRepo.save(product);
+
+                if (product.getInventoryQuantity() >= cart.getQuantity()) {
+                    billRepo.save(bill);
+                    product.setInventoryQuantity((int) (product.getInventoryQuantity() - cart.getQuantity()));
+                    product.setSoldQuantity((int) (product.getSoldQuantity() + cart.getQuantity()));
+                    productRepo.save(product);
+                }
             }
             return true;
         }

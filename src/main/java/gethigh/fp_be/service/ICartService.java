@@ -20,4 +20,6 @@ public interface ICartService extends _IGeneralService<Cart> {
     void plusQuantity(Long product_id, AccountDetail accountDetail);
 
     Double getTotal(Long account_id);
+
+    boolean checkQuantity(Long account_id);
 }

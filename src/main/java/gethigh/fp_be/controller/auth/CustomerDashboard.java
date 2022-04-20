@@ -186,4 +186,10 @@ public class CustomerDashboard {
         }
         return new ResponseEntity<>(bills, HttpStatus.OK);
     }
+
+    @GetMapping("/check-quantity/{customer_id}")
+    public ResponseEntity<?> check(@PathVariable("customer_id") Long customer_id) {
+        boolean check = cartService.checkQuantity(customer_id);
+        return new ResponseEntity<>(check, HttpStatus.OK);
+    }
 }
