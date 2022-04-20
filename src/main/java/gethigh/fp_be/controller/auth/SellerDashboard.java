@@ -95,7 +95,7 @@ public class SellerDashboard {
     }
 
     //sửa sản phẩm
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable("id") Long id,
                                            @RequestBody Product productUpdate) {
         Optional<Product> product = productService.findById(id);
@@ -105,6 +105,9 @@ public class SellerDashboard {
         productUpdate.setId(product.get().getId());
         productUpdate.setSoldQuantity(product.get().getSoldQuantity());
         productUpdate.setStore(product.get().getStore());
+        if (productUpdate.getCoverImage() == null) {
+            productUpdate.setCoverImage(product.get().getCoverImage());
+        }
         productUpdate = productService.save(productUpdate);
         return new ResponseEntity<>(productUpdate, HttpStatus.OK);
     }
