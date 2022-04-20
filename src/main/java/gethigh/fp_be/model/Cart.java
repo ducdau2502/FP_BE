@@ -12,6 +12,8 @@ public class Cart {
 
     private Long quantity;
 
+    private Double totalPrice;
+
     @ManyToOne
     private AccountDetail accountDetail;
 
