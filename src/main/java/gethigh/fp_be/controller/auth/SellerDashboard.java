@@ -64,10 +64,11 @@ public class SellerDashboard {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //tìm sản phẩm theo tên
-    @GetMapping("/find/{name}")
-    public ResponseEntity<Iterable<Product>> findByName(@RequestParam("name") String name) {
-        Iterable<Product> products = productService.findByName(name);
+    //tìm sản phẩm theo tên và cửa hàng
+    @GetMapping("/find-by-name/{id_store}")
+    public ResponseEntity<Iterable<Product>> findByNameAndStore(@PathVariable("id_store") Long id_store,
+                                                                @RequestParam("search_product") String search) {
+        Iterable<Product> products = productService.findAllByStore_IdAndNameContaining(id_store, search);
         if (products.iterator().hasNext()) {
             return new ResponseEntity<>(products, HttpStatus.OK);
         }
