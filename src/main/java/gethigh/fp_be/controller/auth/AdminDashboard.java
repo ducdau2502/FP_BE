@@ -89,10 +89,11 @@ public class AdminDashboard {
                 account.get().getRoles());
         accountRepo.save(accountNew);
         Optional<AccountDetail> accountDetail = accountDetailService.findByAccount_Id(account.get().getId());
-        AccountDetail accountDetailnew = new AccountDetail(account.get().getId(),"Activated");
-        accountDetailService.save(accountDetailnew);
+//        AccountDetail accountDetailnew = new AccountDetail(account.get().getId(),"Activated");
+        accountDetail.get().setStatus("Activated");
+        accountDetailService.save(accountDetail.get());
         Store store = new Store();
-        store.setStoreOwner(accountDetailnew);
+        store.setStoreOwner(accountDetail.get());
         iStoreService.save(store);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
