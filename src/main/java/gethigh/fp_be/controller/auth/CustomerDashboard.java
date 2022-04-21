@@ -154,7 +154,9 @@ public class CustomerDashboard {
     public ResponseEntity<?> pay(@PathVariable("account_id") Long account_id) {
         List<Cart> carts = (List<Cart>) cartService.findAllByAccountDetail_Id(account_id);
         boolean payCheck = billService.addBill(carts, account_id);
-        cartService.deleteAllByAccountDetail_Id(account_id);
+        if (payCheck) {
+            cartService.deleteAllByAccountDetail_Id(account_id);
+        }
         return new ResponseEntity<>(payCheck, HttpStatus.OK);
     }
 

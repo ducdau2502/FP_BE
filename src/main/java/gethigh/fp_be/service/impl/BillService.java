@@ -3,6 +3,7 @@ package gethigh.fp_be.service.impl;
 import gethigh.fp_be.model.*;
 import gethigh.fp_be.repository.*;
 import gethigh.fp_be.service.IBillService;
+import gethigh.fp_be.service.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class BillService implements IBillService {
 
     @Autowired
     StoreRepo storeRepo;
+
+    @Autowired
+    private ICartService cartService;
 
 
     @Override
@@ -52,6 +56,7 @@ public class BillService implements IBillService {
 
     @Override
     public boolean addBill(List<Cart> carts, Long account_id) {
+        boolean flag = true;
         if (!carts.isEmpty()) {
             for (Cart cart : carts) {
                 Bill bill = new Bill();
@@ -65,16 +70,18 @@ public class BillService implements IBillService {
                 bill.setProduct(product);
                 voucher.ifPresent(bill::setVoucher);
 
-                if (product.getInventoryQuantity() >= cart.getQuantity()) {
+                if (product.getInventoryQuantity() < cart.getQuantity()) {
+                   flag = false;
+                   break;
+                } else {
                     billRepo.save(bill);
                     product.setInventoryQuantity((int) (product.getInventoryQuantity() - cart.getQuantity()));
                     product.setSoldQuantity((int) (product.getSoldQuantity() + cart.getQuantity()));
                     productRepo.save(product);
                 }
             }
-            return true;
         }
-        return false;
+        return flag;
     }
 
     @Override
